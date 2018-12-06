@@ -31,7 +31,20 @@ int main() {
 		cout << A[i] << '\t';
 	}
 	cout << endl;*/
-	long long fib = Fibonacci(12);
-	cout << fib << endl;
+	/*long long fib = Fibonacci(12);
+	cout << fib << endl;*/
+	/*int A[10] = {1};
+	cout << Rotate_Min(A, 1) << endl;*/
+	/*const char* matrix = "abcesfcsadee";
+	const char* str = "see";
+	bool result=HasPath((const char*)matrix, 3, 4, (const char*)str);
+	if (result)
+		cout << "存在路径" << endl;
+	else
+		cout << "不存在路径" << endl;*/
+	/*int count = robotRoad(8, 40, 40);
+	cout << "能到达的格子数：" <<count<< endl;*/
+	cout << "绳子长度乘积最大为：" << maxProductAfterCutting2(8) << endl;
+	cout << "1的个数为" << numberOf1_2(-1) << endl;;
 	return 0;
 }

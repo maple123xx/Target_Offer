@@ -142,25 +142,191 @@ void copyBtoA(int *A, int *B,int a ,int b) {
 	}
 }
 //面试题6：从头到尾打印链表，在数据结构里面已经写过了
-//面试题7：重建二叉树
+//面试题7：重建二叉树，在数据结构里面已经写过了
 //面试题10：斐波那契数列
 long long Fibonacci(unsigned int n) {
-	/*if (n == 0)
+	/*if (n == 0)	//递归：效率低
 		return 0;
 	if (n == 1)
 		return 1;
 	return Fibonacci(n - 1) + Fibonacci(n - 2);*/
-	if (n == 0)
+	if (n == 0)		//非递归
 		return 0;
 	if (n == 1)
 		return 1;
 	long long a = 0;
 	long long b = 1;
 	long long c;
-	for (int i = 2; i <= n; ++i) {
+	for (unsigned int i = 2; i <= n; ++i) {
 		c = a + b;
 		a = b;
 		b = c;
 	}
 	return c;
+}
+//面试题十一：旋转数组的最小数字
+int Rotate_Min(int *A, int length) {//[3,4,5,1,2]
+	int low = 0, high = length - 1;
+	int mid = low;	//若数组递增，循环一次也进不去，直接返回最小值A[low],所以把mid初始化为low
+	while (A[low] >= A[high]) {
+		if (high - low == 1) {
+			mid = high;
+			break;
+		}
+		mid = (low + high) / 2;
+		if (A[low] == A[mid] && A[high] == A[mid]) {//若三者相等，则只能顺序查找，如[1,0,1,1,1]或[1,1,1,0,1]
+			return MinSequenceFind(A, low, high);
+		}
+		if (A[mid] >= A[low])
+			low = mid;
+		else if (A[mid] <= A[high])
+			high = mid;
+	}
+	return A[mid];
+}
+int MinSequenceFind(int *A, int low,int high) {
+	int min = A[low];
+	for (int i = low+1; i <= high; ++i) {
+		if (A[i] < min)
+			min = A[i];
+	}
+	return min;
+}
+//面试题十二：矩阵中的路径：回溯法
+bool HasPath(const char* matrix, int rows, int cols, const char* str) {
+	if (matrix == nullptr || rows < 1 || cols < 1 || str == nullptr)
+		return false;
+
+	bool *visited = new bool[rows*cols];
+	memset(visited, 0, rows*cols);
+
+	int pathLength = 0;
+
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < cols; ++j) {
+			if (HasPathCore(matrix, rows, i, cols, j, str, pathLength, visited))
+				return true;
+		}
+	}
+	delete[] visited;
+	return false;
+}
+bool HasPathCore(const char* matrix, int rows, int i, int cols, int j, const char* str,int &pathLength, bool *visited) {
+	if (str[pathLength] == '\0')//递归终止条件
+		return true;
+	bool hasPath = false;
+	if (i >= 0 && i < rows && j >= 0 && j < cols && matrix[i*cols + j] == str[pathLength] && !visited[i*cols + j]) {
+		++pathLength;
+		visited[i*cols + j] = true;
+
+		hasPath = HasPathCore(matrix, rows, i, cols, j - 1, str, pathLength, visited) ||
+			HasPathCore(matrix, rows, i - 1, cols, j, str, pathLength, visited) ||
+			HasPathCore(matrix, rows, i, cols, j + 1, str, pathLength, visited) ||
+			HasPathCore(matrix, rows, i + 1, cols, j, str, pathLength, visited);
+		if (!hasPath) {
+			--pathLength;
+			visited[i*cols + j] = false;
+		}
+	}
+	return hasPath;
+}
+//面试题十三：机器人的运动范围：回溯法
+int robotRoad(int threshold, int rows, int cols) {
+	if (threshold < 0 || rows <= 0 || cols <= 0)
+		return 0;
+	
+	bool *visited = new bool[rows*cols];
+	/*for (int i = 0; i < rows*cols; ++i)
+		visited[i] = false;*/
+	memset(visited, 0, rows*cols);
+	int count = robotRoadCore(threshold, rows, cols, 0, 0, visited);
+	delete[] visited;
+	return count;
+}
+int robotRoadCore(int threshold, int rows, int cols, int i, int j, bool *visited) {
+	int count = 0;
+	if (check(threshold, rows, cols, i, j, visited)) {
+		visited[i*cols + j] = true;
+		count = 1 + robotRoadCore(threshold, rows, cols, i, j - 1, visited) +
+			robotRoadCore(threshold, rows, cols, i - 1, j, visited) +
+			robotRoadCore(threshold, rows, cols, i, j + 1, visited) +
+			robotRoadCore(threshold, rows, cols, i + 1, j, visited);
+	}
+	return count;
+}
+bool check(int threshold, int rows, int cols, int i, int j, bool *visited) {
+	if (rows>i&&cols>j&&i>=0&&j>=0&&(getDigitSum(i) + getDigitSum(j))<=threshold&&(!visited[i*cols+j])) {
+		return true;
+	}
+	return false;
+}
+int getDigitSum(int i) {
+	int sum = 0;
+	while (i>0) {
+		sum += (i % 10);
+		i /= 10;
+	}
+	return sum;
+}
+//面试题十四：剪绳子
+int maxProductAfterCutting1(int length) {
+	//动态规划解法
+	if (length < 2)
+		return 0;
+	if (length == 2)
+		return 1;
+	if (length == 3)
+		return 2;
+	int *products = new int[length + 1];
+	products[0] = 0;
+	products[1] = 1;
+	products[2] = 2;
+	products[3] = 3;//products[3]是把4切成1和3后的3，不是当length=3是返回2
+	int max = 0;
+	for (int i = 4; i <= length; ++i) {
+		max = 0;
+		for (int j = 1; j <= i / 2; ++j) {			
+			int product = products[j] * products[i - j];
+			if (max < product)
+				max = product;
+		}
+		products[i] = max;
+	}
+	max = products[length];
+	delete[] products;
+	return max;
+}
+int maxProductAfterCutting2(int length) {
+	//贪心算法求解
+	if (length < 2)
+		return 0;
+	if (length == 2)
+		return 1;
+	if (length == 3)
+		return 2;
+	int timesOf3 = length / 3;
+	if (length - timesOf3 * 3 == 1)
+		timesOf3 -= 1;
+	int timesOf2 = (length - timesOf3 * 3) / 2;
+	return pow(3, timesOf3)*pow(2, timesOf2);
+}
+//面试题十五：二进制数的1的个数
+int numberOf1_1(int n) {
+	int count = 0;
+	unsigned int flag = 1;
+	while (flag) {
+		if (n&flag)		//每次判断n的最低位是不是1
+			++count;
+		flag = flag << 1;		//然后将flag左移1位
+		//n>>1;			//每次将n右移1位是不妥的，若n为负数，右移后左边补1，一直补1，就会导致死循环
+	}
+	return count;
+}
+int numberOf1_2(int n) {//方法二
+	int count = 0;
+	while (n) {
+		++count;
+		n = n&(n - 1);//把一个整数减去1后再和原来的数做与操作，得到的结果相当于把整数的二进制表示中最右边的1变成0
+	}
+	return count;
 }
