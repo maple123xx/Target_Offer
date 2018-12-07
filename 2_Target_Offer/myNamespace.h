@@ -21,4 +21,5 @@ using std::deque;
 using std::set;
 using std::map;
 using std::exception;
+using std::fabs;
 

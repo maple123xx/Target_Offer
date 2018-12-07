@@ -18,8 +18,18 @@ int robotRoadCore(int threshold, int rows, int cols, int i, int j, bool *visited
 bool check(int threshold, int rows, int cols, int i, int j, bool *visited);
 int getDigitSum(int i);
 int maxProductAfterCutting1(int length);
-int maxProductAfterCutting2(int length);
+double maxProductAfterCutting2(int length);
 int numberOf1_1(int n);
 int numberOf1_2(int n);
+bool isPowerOf2(int n);
+int changeBit(int m, int n);
+double power(double base, int exponent, bool &invalidInput);
+double PowerWithUnsignedExponent1(double base, unsigned int absExponent);
+double PowerWithUnsignedExponent2(double base, unsigned int absExponent);
+void Print1ToMaxOfNDigits_1(int n);
+void PrintNumber(char *number);
+bool Increment(char* number);
+void Print1ToMaxOfNDigits_2(int n);
+void Print1ToMaxOfNDigitsRecursively(char* number, int length, int index);
 #endif // !offer_
 

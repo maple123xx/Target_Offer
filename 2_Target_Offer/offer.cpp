@@ -296,7 +296,7 @@ int maxProductAfterCutting1(int length) {
 	delete[] products;
 	return max;
 }
-int maxProductAfterCutting2(int length) {
+double maxProductAfterCutting2(int length) {
 	//贪心算法求解
 	if (length < 2)
 		return 0;
@@ -329,4 +329,131 @@ int numberOf1_2(int n) {//方法二
 		n = n&(n - 1);//把一个整数减去1后再和原来的数做与操作，得到的结果相当于把整数的二进制表示中最右边的1变成0
 	}
 	return count;
+}
+//相关题目
+bool isPowerOf2(int n) {//判断n是否是2的幂
+	n = n&(n - 1);
+	if (n == 0)
+		return true;
+	else
+		return false;
+}
+int changeBit(int m, int n) {//改变m的二进制表示中的多少位才能得到n
+	int h = m^n;
+	int count = 0;
+	while (h) {
+		++count;
+		h = h&(h - 1);
+	}
+	return count;
+}
+//面试题十六：数值的整数次方
+double power(double base, int exponent, bool &invalidInput) {
+	if (fabs(base-0.0)<0.00001 && exponent < 0) {//输入合法性检查
+		invalidInput = true;
+		return 0.0;
+	}
+	unsigned int absExponent = (unsigned int)exponent;
+	if (exponent < 0)			//指数为负
+		absExponent = (unsigned int)(-exponent);
+	double result = PowerWithUnsignedExponent2(base, absExponent);
+	if (exponent < 0) {
+		return 1.0 / result;
+	}
+	return result;
+}
+double PowerWithUnsignedExponent1(double base, unsigned int absExponent) {
+	double result = 1.0;
+	for (unsigned int i = 1; i <= absExponent; ++i) {
+		result = result*base;
+	}
+	return result;
+}
+double PowerWithUnsignedExponent2(double base, unsigned int absExponent) {
+	//求幂的高级方法
+	if (absExponent == 0)
+		return 1;
+	if (absExponent == 1)
+		return base;
+	double result = PowerWithUnsignedExponent2(base, absExponent >> 1);//右移相当于除以2,效率更高
+	result *= result;
+	if ((absExponent & 1) == 1) {//判断指数是奇数还是偶数，与运算比求余效率高
+		result *= base;
+	}
+	return result;
+}
+//面试题十七：打印从1到最大的n位数，大数问题
+void Print1ToMaxOfNDigits_1(int n) {
+	if (n <= 0)
+		return;
+	char *number = new char[n + 1];
+	memset(number, '0', n);
+	number[n] = '\0';
+	while (!Increment(number)) {
+		PrintNumber(number);
+	}
+	delete[]number;
+}
+bool Increment(char* number) {
+	// 字符串number表示一个数字，在 number上增加1
+	// 如果做加法溢出，则返回true；否则为false
+	int nSum=0, nTakeover=0;
+	bool isOverflow = false;
+	int length = strlen(number);
+	for (int i = length - 1; i >= 0; --i) {
+		nSum = number[i] - '0' + nTakeover;
+		if (i == length - 1)
+			++nSum;
+		if (nSum >= 10) {
+			if (i == 0)
+				isOverflow = true;
+			else {
+				nSum -= 10;
+				nTakeover = 1;
+				number[i] = '0' + nSum;
+			}
+		}
+		else {
+			number[i] = '0' + nSum;
+			break;
+		}
+	}
+	return isOverflow;
+}
+void PrintNumber(char *number) {
+	// 字符串number表示一个数字，数字有若干个0开头
+	// 打印出这个数字，并忽略开头的0
+	bool isFirst = true;
+	int length = strlen(number);
+	for (int i = 0; i < length; ++i) {
+		if (isFirst&&number[i] != '0') {//是第一个数字且为0
+			isFirst = false;
+		}
+		if (!isFirst)
+			cout << number[i];
+	}
+	cout << '\t';
+}
+void Print1ToMaxOfNDigits_2(int n)
+{	//方法二：用递归，n=3时，打印1~999相当于输出3个数字的全排列
+	if (n <= 0)
+		return;
+	char *number = new char[n+1];
+	number[n] = '\0';
+	for (int i = 0; i < 10; ++i) {
+		number[0] = i + '0';
+		Print1ToMaxOfNDigitsRecursively(number, n, 0);
+	}
+	delete[] number;
+}
+void Print1ToMaxOfNDigitsRecursively(char* number, int length, int index)
+{
+	if (index == length - 1) {
+		PrintNumber(number);
+		return;
+	}
+	for (int i = 0; i < 10; ++i) {
+		number[index + 1] = i + '0';
+		Print1ToMaxOfNDigitsRecursively(number, length, index + 1);
+	}
 }

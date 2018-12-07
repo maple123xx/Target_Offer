@@ -44,7 +44,20 @@ int main() {
 		cout << "不存在路径" << endl;*/
 	/*int count = robotRoad(8, 40, 40);
 	cout << "能到达的格子数：" <<count<< endl;*/
-	cout << "绳子长度乘积最大为：" << maxProductAfterCutting2(8) << endl;
-	cout << "1的个数为" << numberOf1_2(-1) << endl;;
+	/*cout << "绳子长度乘积最大为：" << maxProductAfterCutting2(8) << endl;
+	cout << "1的个数为" << numberOf1_2(-1) << endl;
+	if (isPowerOf2(15))
+		cout << "是2的幂" << endl;*/
+	//cout << "需要改变的bit数为：" << changeBit(2,13) << endl;
+	//unsigned int a = (unsigned int)(-1);
+	//cout << a << endl;				//输出为429467295，即2的32次方减1,因为-1以补码形式存储，除符号位，取反加1，
+	//cout << pow(2, 32) - 1 << endl;	//也就是变成32个1了，再强制转为无符号数，就是这个结果
+	/*bool invalidInput = false;
+	double result = power(2, 5, invalidInput);
+	if (!invalidInput)
+		cout << "输入合法，幂值为：" << result << endl;
+	else
+		cout << "底数为0，且指数为负数，无意义" << endl;*/
+	Print1ToMaxOfNDigits_2(3);
 	return 0;
 }
