@@ -457,3 +457,6 @@ void Print1ToMaxOfNDigitsRecursively(char* number, int length, int index)
 		Print1ToMaxOfNDigitsRecursively(number, length, index + 1);
 	}
 }
+//面试题二十一：使奇数位于偶数前面在数据结构里面写过
+//面试题二十二：：链表中倒数第k个节点在数据结构里面写过
+//面试题二十四：：反转链表在数据结构里面写过
