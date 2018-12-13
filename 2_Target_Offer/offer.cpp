@@ -143,6 +143,67 @@ void copyBtoA(int *A, int *B,int a ,int b) {
 }
 //面试题6：从头到尾打印链表，在数据结构里面已经写过了
 //面试题7：重建二叉树，在数据结构里面已经写过了
+
+//面试题8：二叉树的下一个节点
+BTNode *CreateBTNode(ElemType data) {
+	BTNode *pNode = new BTNode();
+	pNode->data = data;
+	pNode->parent = NULL;
+	pNode->lchild = NULL;
+	pNode->rchild = NULL;
+	return pNode;
+}
+void ConnectTreeNode(BTNode *parent, BTNode *lchild, BTNode *rchild) {
+	if (parent) {
+		parent->lchild = lchild;
+		parent->rchild = rchild;
+		if (lchild)
+			lchild->parent = parent;
+		if (rchild)
+			rchild->parent = parent;
+	}
+}
+void PreOrder(BTNode *root) {
+	if (root) {
+		cout << root->data << '\t';
+		PreOrder(root->lchild);
+		PreOrder(root->rchild);
+	}
+}
+BTNode *NextNode(BTNode *pNode) {
+	//求某个节点的中序遍历的下一个节点
+	if (!pNode)
+		return NULL;
+	BTNode *pNext = NULL;
+	if (pNode->rchild) {	//如果该节点有右孩子，则下一个节点为右子树的最左下节点
+		BTNode *pRight = pNode->rchild;
+		while (pRight->lchild){
+			pRight = pRight->lchild;
+		}
+		pNext = pRight;
+	}
+	else if (pNode->parent) {	//如果它没有右孩子
+		BTNode *pCurrent = pNode;
+		BTNode *pParent = pNode->parent;
+		while (pParent&&pParent->rchild == pCurrent) {//若它是它父节点的左孩子，则下一个节点就是它的父节点
+			pCurrent = pParent;						  //否则一直向上遍历，直到当前是它父节点的左孩子
+			pParent = pParent->parent;
+		}
+		pNext = pParent;
+	}
+	return pNext;
+}
+void DestroyTree(BTNode *root) {
+	if (root) {
+		BTNode *left = root->lchild;
+		BTNode *right = root->rchild;
+		delete root;
+		root = NULL;
+		DestroyTree(left);
+		DestroyTree(right);
+	}
+}
+
 //面试题10：斐波那契数列
 long long Fibonacci(unsigned int n) {
 	/*if (n == 0)	//递归：效率低

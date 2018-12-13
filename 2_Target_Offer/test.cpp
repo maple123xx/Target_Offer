@@ -58,6 +58,26 @@ int main() {
 		cout << "输入合法，幂值为：" << result << endl;
 	else
 		cout << "底数为0，且指数为负数，无意义" << endl;*/
-	Print1ToMaxOfNDigits_2(3);
+	//Print1ToMaxOfNDigits_2(3);
+	/*BTNode *pNode8 = CreateBTNode(8);
+	BTNode *pNode6 = CreateBTNode(6);
+	BTNode *pNode10 = CreateBTNode(10);
+	BTNode *pNode5 = CreateBTNode(5);
+	BTNode *pNode7 = CreateBTNode(7);
+	BTNode *pNode9 = CreateBTNode(9);
+	BTNode *pNode11 = CreateBTNode(11);
+	BTNode *pNode4 = CreateBTNode(4);
+	BTNode *pNode3 = CreateBTNode(3);
+	BTNode *pNode2 = CreateBTNode(2);
+	ConnectTreeNode(pNode8, pNode6, pNode10);
+	ConnectTreeNode(pNode6, pNode5, pNode7);
+	ConnectTreeNode(pNode10, pNode9, pNode11);
+	ConnectTreeNode(pNode7, pNode4, pNode3);
+	ConnectTreeNode(pNode4, nullptr, pNode2);
+	PreOrder(pNode8);
+	BTNode *pNext = NextNode(pNode9);
+	cout << endl << pNext->data << endl;
+	DestroyTree(pNode5);
+	cout << pNode5->data << endl;*/
 	return 0;
 }

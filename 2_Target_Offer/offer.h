@@ -2,6 +2,20 @@
 #define offer_
 #include"myNamespace.h"
 
+typedef int ElemType;
+struct BTNode {
+	ElemType data;
+	BTNode *lchild;
+	BTNode *rchild;
+	BTNode *parent;
+};
+BTNode *CreateBTNode(ElemType data);
+void ConnectTreeNode(BTNode *parent, BTNode *lchild, BTNode *rchild);
+void PreOrder(BTNode *root);
+BTNode *NextNode(BTNode *pNode);
+void DestroyTree(BTNode *root);
+
+
 bool Duplicate(int *A, int length, int *duplicate);
 int Duplicate2(const int *A,int length);
 int countRange(const int *A, int length, int start, int end);
