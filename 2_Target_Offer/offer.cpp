@@ -519,5 +519,43 @@ void Print1ToMaxOfNDigitsRecursively(char* number, int length, int index)
 	}
 }
 //面试题二十一：使奇数位于偶数前面在数据结构里面写过
-//面试题二十二：：链表中倒数第k个节点在数据结构里面写过
-//面试题二十四：：反转链表在数据结构里面写过
+//面试题二十二：链表中倒数第k个节点在数据结构里面写过
+//面试题二十四：反转链表在数据结构里面写过
+//面试题25：合并两个排序的链表在数据结构里面写过
+//面试题26：树的子结构
+bool HasSubtree(BTNode *root1, BTNode *root2) {//这个是大的递归你
+	bool result = false;
+	if (root1&&root2) {
+		if (abs(root1->data - root2->data) < 0.000001)
+			result = DoesTree1HaveTree2(root1, root2);
+		if(!result)
+			result = DoesTree1HaveTree2(root1->lchild, root2);
+		if (!result)
+			result = DoesTree1HaveTree2(root1->rchild, root2);
+	}
+	return result;
+}
+bool DoesTree1HaveTree2(BTNode *root1, BTNode *root2) {//这个是小的递归
+	if (!root2)
+		return true;
+	if (!root1)
+		return false;
+	if (!(abs(root1->data - root2->data) < 0.000001))
+		return false;
+	return DoesTree1HaveTree2(root1->lchild, root2->lchild) && DoesTree1HaveTree2(root1->lchild, root2->lchild);
+}
+//面试题27：二叉树的镜像在数据结构里面写过
+//面试题28：对称的二叉树
+bool isSymmetry(BTNode *root) {
+	return isSymmetry(root, root);
+}
+bool isSymmetry(BTNode *root1, BTNode *root2) {
+	if (root1 == NULL&&root2 == NULL)
+		return true;
+	if (root1 == NULL || root2 == NULL)
+		return false;
+	if (root1->data != root2->data)
+		return false;
+	return isSymmetry(root1->lchild, root2->rchild) && isSymmetry(root1->rchild, root2->lchild);
+
+}

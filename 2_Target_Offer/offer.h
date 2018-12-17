@@ -2,7 +2,7 @@
 #define offer_
 #include"myNamespace.h"
 
-typedef int ElemType;
+typedef double ElemType;
 struct BTNode {
 	ElemType data;
 	BTNode *lchild;
@@ -14,6 +14,10 @@ void ConnectTreeNode(BTNode *parent, BTNode *lchild, BTNode *rchild);
 void PreOrder(BTNode *root);
 BTNode *NextNode(BTNode *pNode);
 void DestroyTree(BTNode *root);
+bool HasSubtree(BTNode *root1, BTNode *root2);
+bool DoesTree1HaveTree2(BTNode *root1, BTNode *root2);
+bool isSymmetry(BTNode *root);
+bool isSymmetry(BTNode *root1, BTNode *root2);
 
 
 bool Duplicate(int *A, int length, int *duplicate);

@@ -59,25 +59,40 @@ int main() {
 	else
 		cout << "底数为0，且指数为负数，无意义" << endl;*/
 	//Print1ToMaxOfNDigits_2(3);
-	/*BTNode *pNode8 = CreateBTNode(8);
-	BTNode *pNode6 = CreateBTNode(6);
-	BTNode *pNode10 = CreateBTNode(10);
+	//BTNode *pNode8 = CreateBTNode(8);
+	//BTNode *pNode8_2 = CreateBTNode(8);
+	//BTNode *pNode7 = CreateBTNode(7);
+	//BTNode *pNode9 = CreateBTNode(9);
+	//BTNode *pNode2 = CreateBTNode(2);
+	//BTNode *pNode4 = CreateBTNode(4);
+	//BTNode *pNode7_2 = CreateBTNode(7);
+	//BTNode *pNode8_3 = CreateBTNode(8);
+	//BTNode *pNode9_2 = CreateBTNode(9);
+	//BTNode *pNode2_2 = CreateBTNode(2);
+	//ConnectTreeNode(pNode8, pNode8_2, pNode7);
+	//ConnectTreeNode(pNode8_2, pNode9, pNode2);
+	//ConnectTreeNode(pNode2, pNode4, pNode7_2);
+	//ConnectTreeNode(pNode8_3, pNode9_2, pNode2_2);
+	////ConnectTreeNode(pNode4, nullptr, pNode2);
+	//PreOrder(pNode8);
+	//cout << endl;
+	//PreOrder(pNode8_3);
+	//cout << endl;
+	//bool result = HasSubtree(pNode8, pNode8_3);
+	//if (result)
+	//	cout << "B是A的子结构" << endl;
+	BTNode *pNode8 = CreateBTNode(8);
+	BTNode *pNode6 = CreateBTNode(3);
+	BTNode *pNode6_2 = CreateBTNode(6);
 	BTNode *pNode5 = CreateBTNode(5);
 	BTNode *pNode7 = CreateBTNode(7);
-	BTNode *pNode9 = CreateBTNode(9);
-	BTNode *pNode11 = CreateBTNode(11);
-	BTNode *pNode4 = CreateBTNode(4);
-	BTNode *pNode3 = CreateBTNode(3);
-	BTNode *pNode2 = CreateBTNode(2);
-	ConnectTreeNode(pNode8, pNode6, pNode10);
+	BTNode *pNode7_2 = CreateBTNode(7);
+	BTNode *pNode5_2 = CreateBTNode(5);
+	ConnectTreeNode(pNode8, pNode6, pNode6_2);
 	ConnectTreeNode(pNode6, pNode5, pNode7);
-	ConnectTreeNode(pNode10, pNode9, pNode11);
-	ConnectTreeNode(pNode7, pNode4, pNode3);
-	ConnectTreeNode(pNode4, nullptr, pNode2);
-	PreOrder(pNode8);
-	BTNode *pNext = NextNode(pNode9);
-	cout << endl << pNext->data << endl;
-	DestroyTree(pNode5);
-	cout << pNode5->data << endl;*/
+	ConnectTreeNode(pNode6_2, pNode7, pNode5);
+	if (isSymmetry(pNode8))
+		cout << "是对称的" << endl;
+
 	return 0;
 }
