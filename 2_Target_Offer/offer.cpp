@@ -460,8 +460,8 @@ bool Increment(char* number) {
 	// 如果做加法溢出，则返回true；否则为false
 	int nSum=0, nTakeover=0;
 	bool isOverflow = false;
-	int length = strlen(number);
-	for (int i = length - 1; i >= 0; --i) {
+	size_t length = strlen(number);
+	for (auto i = length - 1; i >= 0; --i) {
 		nSum = number[i] - '0' + nTakeover;
 		if (i == length - 1)
 			++nSum;
@@ -485,8 +485,8 @@ void PrintNumber(char *number) {
 	// 字符串number表示一个数字，数字有若干个0开头
 	// 打印出这个数字，并忽略开头的0
 	bool isFirst = true;
-	int length = strlen(number);
-	for (int i = 0; i < length; ++i) {
+	size_t length = strlen(number);
+	for (auto i = 0; i < length; ++i) {
 		if (isFirst&&number[i] != '0') {//是第一个数字且为0
 			isFirst = false;
 		}
@@ -558,4 +558,334 @@ bool isSymmetry(BTNode *root1, BTNode *root2) {
 		return false;
 	return isSymmetry(root1->lchild, root2->rchild) && isSymmetry(root1->rchild, root2->lchild);
 
+}
+//面试题31：栈的压入、弹出序列
+bool isPopOrder(const int *pPush, const int *pPop, int length) {
+	//所有数字不等，判断弹出序列是否正确，比如压入序列为{1，2，3，4，5},{4，5，3，2，1}就是一个正确的弹出序列
+	if (pPush&&pPop&&length > 0) {
+		const int *pNextPush = pPush;//两个指针分别指向两个序列
+		const int *pNextPop = pPop;
+		stack<int> stackData;
+		while (pNextPop - pPop != length) {
+			while (stackData.empty() || stackData.top() != *pNextPop) {
+				if (pNextPush - pPush == length)
+					break;
+				stackData.push(*pNextPush);
+				++pNextPush;
+			}
+			if (stackData.top() != *pNextPop)
+				break;
+			stackData.pop();
+			++pNextPop;
+		}
+		if (stackData.empty() && pNextPop - pPop == length)
+			return true;
+	}
+	return false;
+
+}
+//面试题32：层次遍历
+void LevelPrint(BTNode *root) {
+	if (root) {
+		deque<BTNode *> myQueue;
+		myQueue.push_back(root);
+		while (myQueue.size()) {
+			BTNode *p = myQueue.front();
+			myQueue.pop_front();
+			cout << p->data << '\t';
+			if(p->lchild)
+				myQueue.push_back(p->lchild);
+			if (p->rchild)
+				myQueue.push_back(p->rchild);
+		}
+	}
+	cout << endl;
+}
+//相关题目：分行打印二叉树
+void LevelPrint2(BTNode *root) {
+	if (!root)
+		return;
+	BTNode *p;
+	deque<BTNode *> myQueue;
+	int nextLevel = 0;	//表示下一层的节点数
+	int toBePrinted = 1;	//表示当前层中还没有被打印的节点数
+	myQueue.push_back(root);
+	while (!myQueue.empty()) {
+		p = myQueue.front();
+		myQueue.pop_front();
+		cout << p->data << '\t';
+		--toBePrinted;
+		if (p->lchild) {
+			myQueue.push_back(p->lchild);
+			++nextLevel;
+		}
+		if (p->rchild) {
+			myQueue.push_back(p->rchild);
+			++nextLevel;
+		}
+		if (toBePrinted == 0) {
+			cout << endl;
+			toBePrinted = nextLevel;
+			nextLevel = 0;	//到下一层了就重新计算个数
+		}		
+	}
+}
+//之字性打印二叉树
+void LevelPrint3(BTNode *root) {
+	if (!root)
+		return;
+	BTNode *p;
+	stack<BTNode *> myStack[2];	//定义两个栈
+	int current = 0, next = 1;	//current和next分别代表当前栈和另一个栈
+	myStack[current].push(root);
+	while (!myStack[0].empty() || !myStack[1].empty()) {
+		p = myStack[current].top();
+		cout << p->data << '\t';
+		myStack[current].pop();
+		if (current == 0) {
+			if (p->lchild)
+				myStack[next].push(p->lchild);
+			if (p->rchild)
+				myStack[next].push(p->rchild);
+		}
+		if (current == 1) {
+			if (p->rchild)
+				myStack[next].push(p->rchild);
+			if (p->lchild)
+				myStack[next].push(p->lchild);
+		}
+		if (myStack[current].empty()) {
+			cout << endl;
+			current = 1 - current;
+			next = 1 - next;
+		}
+	}
+}
+//面试题33：判断给定的序列是不是一颗二叉排序树的后续遍历
+bool VerifySequenceOfBST(int Sequence[], int length) {
+	if (length <= 0)
+		return false;
+	int root = Sequence[length - 1];		//若是后续遍历，则最后一个节点是根节点
+	int i = 0;
+	for (; i < length - 1; ++i) {	//找到第一个大于root的点，前面即是左子树
+		if (Sequence[i] > root)
+			break;
+	}
+	int j = i;
+	for (; j < length - 1; ++j) {	//若右子树中有小于root的，直接返回false，因为是一棵二叉排序树
+		if (Sequence[j] < root)
+			return false;
+	}
+	bool left = true;
+	if (i > 0) {			//这个判断是确保长度大于0
+		left = VerifySequenceOfBST(Sequence, i);
+	}
+	bool right = true;
+	if (i < length - 1) {	//这个判断也是确保长度大于0
+		right = VerifySequenceOfBST(Sequence + i, length - i - 1);
+	}
+	return left&&right;
+}
+//面试题34：二叉树中和为某一值得路径在数据结构里面写过
+//面试题39：数组中出现次数超过一半的数字
+int MoreThanHalfNum(int *num, int length) {
+	//法一：使用快排
+	if (num == NULL || length <= 0)
+		return 0;
+	int middle = length >> 1;
+	int start = 0, end = length - 1;
+	int index = Partition(num, start, end);
+	while (middle != index) {
+		if (middle > index) {
+			start = index + 1;
+			index = Partition(num, start, end);
+		}
+		else {
+			end = index - 1;
+			index = Partition(num, start, end);
+		}
+	}
+	int result = num[middle];
+	if (!CheckMoreThanHalf(num, length, result))
+		return 0;
+	return result;
+}
+int Partition(int *num, int start,int end) {
+	int temp = num[start];
+	while (start < end) {
+		while (start < end&&num[end] >= temp) --end;
+		num[start] = num[end];
+		while (start < end&&num[start] <= temp) ++start;
+		num[end] = num[start];
+	}
+	num[start] = temp;
+	return start;
+}
+bool CheckMoreThanHalf(int *num, int length, int number) {
+	//查看这个数字是不是超过数组一半了
+	int times = 0;
+	for (int i = 0; i < length; ++i) {
+		if (num[i] == number)
+			++times;
+	}
+	if (times * 2 <= length) {
+		return false;
+	}
+	return true;
+}
+int MoreThanHalfNum2(int *num, int length) {
+	//法二：每次遍历保存次数这个变量，O(n)的时间
+	if (num == NULL || length <= 0)
+		return 0;
+	int result = num[0];
+	int times = 1;
+	for (int i = 1; i < length; ++i) {
+		if (times == 0) {
+			result = num[i];
+			times = 1;
+		}
+		if (result == num[i])
+			++times;
+		else
+			--times;
+	}
+	if (!CheckMoreThanHalf(num, length, result))
+		return 0;
+	return result;
+}
+//面试题40：最小的k个数
+void GetLeastNumber(int *input, int n, int *output, int k) {
+	//输出数组的最小的k个数,法一：用快排，O(n)
+	if (input == NULL || output == NULL ||  n <= 0 || k <= 0 || k > n)
+		return;
+	int start = 0, end = n - 1;
+	int index = Partition(input, start, end);
+	while (index != k - 1) {
+		if (index > k - 1) {
+			end = index - 1;
+			index = Partition(input, start, end);
+		}
+		else {
+			start = index + 1;
+			index = Partition(input, start, end);
+		}
+	}
+	for (int i = 0; i < k; ++i) {
+		output[i] = input[i];
+	}
+}
+void GetLeastNumber2(const vector<int>& data,intSet& leastNumbers,int k) {
+	leastNumbers.clear();
+	if (k < 1 || data.size() < k)
+		return;
+	vector<int>::const_iterator iter = data.begin();
+	for (; iter != data.end(); ++iter) {
+		if (leastNumbers.size() < k)
+			leastNumbers.insert(*iter);
+		else {
+			setIterator iterGreatest = leastNumbers.begin();
+			if (*iter < *(leastNumbers.begin())) {
+				leastNumbers.erase(iterGreatest);
+				leastNumbers.insert(*iter);
+			}
+		}
+	}
+}
+//面试题41：数据流中的中位数，写在了头文件中
+//面试题42：连续子数组的最大和
+int FindGreatestSumOfSubArray(int *data, int length){
+	if (data == nullptr || length < 0) {
+		cout << "输入无效" << endl;
+		return 0;
+	}
+	int CurrentSum = 0;
+	int GreatestSum = -9999;			//子数组和
+	for (int i = 0; i < length; ++i) {
+		if (CurrentSum <= 0)
+			CurrentSum = data[i];
+		else
+			CurrentSum += data[i];
+		if (CurrentSum > GreatestSum)
+			GreatestSum = CurrentSum;
+	}
+	return GreatestSum;
+}
+//面试题43：1~n整数中1出现的次数
+int NumberOf1Between1AndN(unsigned int n) {//简单解法
+	int number = 0;
+	for (unsigned int i = 1; i <= n; ++i) {
+		number += NumberOf1(i);
+	}
+	return number;
+}
+int NumberOf1(unsigned int i) {
+	int number = 0;
+	while (i) {
+		if (i % 10 == 1)
+			++number;
+		i /= 10;
+	}
+	return number;
+}
+//面试题44：数字序列中某一位的数字
+//int digitAtIndex(int index) {//数字以01234567891011...的格式序列化到一个字符序列中，求任意第n位对应的数字
+//	if (index < 1)
+//		return -1;
+//	int digit = 1;
+//	while (1) {
+//		int number = countOfIntegers(digit);
+//		if (index < digit*number)
+//			return digitAtIndex(index, digit);
+//		index -= digit*number;
+//		++digit;
+//	}
+//}
+//int countOfIntegers(int digit) {//这个函数得到m位的数字有多少个
+//	if (digit == 1)
+//		return 10;
+//	int count = static_cast<int>(pow(10, digit - 1));	//因为pow返回的是double类型的，所以要转型
+//	return 9 * count;
+//}
+//int digitAtIndex(int index, int digit) {
+//	int number = beginNumber(digit) + index / digit;
+//	int indexFromRight = digit - index % digit;
+//	for (int i = 1; i < indexFromRight; ++i)
+//		number /= 10;
+//	return number % 10;
+//}
+//int beginNumber(int digit) {	//m位数的第一个数字
+//	if (digit == 1)
+//		return 10;
+//	return static_cast<int>(pow(10, digit - 1));
+//}
+int digitAtIndex2(int n) {
+	//法二：从0开始枚举,把每一位的位数都累加起来
+	int sum = 0;
+	int current = 0;
+	while (1) {
+		sum += digit2(current);
+		if (sum <= n) {
+			++current;
+		}
+		else {
+			int diff = n - (sum - digit2(current))+1;
+			int indexFromRight = digit2(current) - diff + 1;
+			for (int i = 1; i < indexFromRight; ++i) {
+				current /= 10;
+			}
+			return current%10;
+		}
+	}
+}
+int digit2(int current) {
+	if (current == 0)
+		return 1;
+	else {
+		int count = 0;
+		while (current) {
+			++count;
+			current /= 10;
+		}
+		return count;
+	}
 }

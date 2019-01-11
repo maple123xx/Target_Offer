@@ -8,6 +8,9 @@
 #include<map>
 #include<exception>
 #include<algorithm>
+#include<stack>
+#include<set>
+#include <functional>//greater£¬lessÔÚfunctionalÀïÃæ
 
 using std::cout;
 using std::cin;
@@ -23,4 +26,9 @@ using std::map;
 using std::exception;
 using std::fabs;
 using std::swap;
-
+using std::stack;
+using std::multiset;
+using std::set;
+using std::greater;
+using std::less;
+using std::pow;

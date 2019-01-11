@@ -59,19 +59,20 @@ int main() {
 	else
 		cout << "底数为0，且指数为负数，无意义" << endl;*/
 	//Print1ToMaxOfNDigits_2(3);
-	//BTNode *pNode8 = CreateBTNode(8);
-	//BTNode *pNode8_2 = CreateBTNode(8);
-	//BTNode *pNode7 = CreateBTNode(7);
-	//BTNode *pNode9 = CreateBTNode(9);
-	//BTNode *pNode2 = CreateBTNode(2);
-	//BTNode *pNode4 = CreateBTNode(4);
-	//BTNode *pNode7_2 = CreateBTNode(7);
-	//BTNode *pNode8_3 = CreateBTNode(8);
-	//BTNode *pNode9_2 = CreateBTNode(9);
-	//BTNode *pNode2_2 = CreateBTNode(2);
-	//ConnectTreeNode(pNode8, pNode8_2, pNode7);
-	//ConnectTreeNode(pNode8_2, pNode9, pNode2);
-	//ConnectTreeNode(pNode2, pNode4, pNode7_2);
+	/*BTNode *pNode8 = CreateBTNode(8);
+	BTNode *pNode8_2 = CreateBTNode(8);
+	BTNode *pNode7 = CreateBTNode(7);
+	BTNode *pNode9 = CreateBTNode(9);
+	BTNode *pNode2 = CreateBTNode(2);
+	BTNode *pNode4 = CreateBTNode(4);
+	BTNode *pNode7_2 = CreateBTNode(7);*/
+	/*BTNode *pNode8_3 = CreateBTNode(8);
+	BTNode *pNode9_2 = CreateBTNode(9);
+	BTNode *pNode2_2 = CreateBTNode(2);*/
+	/*ConnectTreeNode(pNode8, pNode8_2, pNode7);
+	ConnectTreeNode(pNode8_2, pNode9, pNode2);
+	ConnectTreeNode(pNode2, pNode4, pNode7_2);
+	LevelPrint3(pNode8);*/
 	//ConnectTreeNode(pNode8_3, pNode9_2, pNode2_2);
 	////ConnectTreeNode(pNode4, nullptr, pNode2);
 	//PreOrder(pNode8);
@@ -81,7 +82,7 @@ int main() {
 	//bool result = HasSubtree(pNode8, pNode8_3);
 	//if (result)
 	//	cout << "B是A的子结构" << endl;
-	BTNode *pNode8 = CreateBTNode(8);
+	/*BTNode *pNode8 = CreateBTNode(8);
 	BTNode *pNode6 = CreateBTNode(3);
 	BTNode *pNode6_2 = CreateBTNode(6);
 	BTNode *pNode5 = CreateBTNode(5);
@@ -92,7 +93,49 @@ int main() {
 	ConnectTreeNode(pNode6, pNode5, pNode7);
 	ConnectTreeNode(pNode6_2, pNode7, pNode5);
 	if (isSymmetry(pNode8))
-		cout << "是对称的" << endl;
+		cout << "是对称的" << endl;*/
+	/*int pPush[] = { 1,2,3,4,5 };
+	int pPop[] = { 4,5,3,2,1 };
+	if (isPopOrder(pPush, pPop, 5))
+		cout << "是正确的弹出序列" << endl;
+	else
+		cout << "不是正确的弹出序列" << endl;*/
+	//int Sequence[] = { 5,7,6,9,11,10,8 };
+	/*int Sequence[] = { 7,4,6,5 };
+	if (VerifySequenceOfBST(Sequence, 4))
+		cout << "是后续遍历序列" << endl;
+	else
+		cout << "不是" << endl;*/
+	/*int num[] = { 1,2,3,2,2,2};
+	int result = MoreThanHalfNum2(num, 6);
+	cout << "超过数组一半的数字是：" << result << endl;*/
 
+	//int input[] = { 4,5,1,6,2,7,3,8,1,2,7,8,2,1,4};
+	//int output[20];
+	////GetLeastNumber(input, 12, output, 4);
+	///*for (int i = 0; i < 4; ++i) {
+	//	cout << output[i] << '\t';
+	//}*/
+	//vector<int> data;
+	//for (int i = 0; i < sizeof(input) / sizeof(input[0]); ++i) {
+	//	data.push_back(input[i]);
+	//}
+	//intSet leastNumbers;
+	//GetLeastNumber2(data, leastNumbers, 4);
+	//for (setIterator iter = leastNumbers.begin(); iter != leastNumbers.end(); ++iter) {
+	//	cout << *iter << '\t';
+	//}
+	//cout << endl;
+	/*DynamicArray<double> dymArray;
+	dymArray.insert(5);
+	dymArray.insert(2);
+	dymArray.insert(3);
+	dymArray.insert(4);
+	dymArray.insert(1);
+	cout << dymArray.GetMidium() << endl;
+	int data[] = { -2,-8,-1,-5,-9 };
+	cout << FindGreatestSumOfSubArray(data, sizeof(data)/sizeof(data[0]))<<endl;*/
+	//cout << NumberOf1Between1AndN(15) << endl;
+	cout << digitAtIndex2(20) << endl;
 	return 0;
 }
