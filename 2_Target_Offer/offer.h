@@ -118,5 +118,7 @@ int digitAtIndex(int index, int digit);
 int beginNumber(int digit);
 int digitAtIndex2(int n);
 int digit2(int current);
+int getMaxValue_solution1(const int* values, int rows, int cols);
+int getMaxValue_solution2(const int* values, int rows, int cols);
 #endif // !offer_
 

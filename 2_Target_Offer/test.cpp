@@ -136,6 +136,10 @@ int main() {
 	int data[] = { -2,-8,-1,-5,-9 };
 	cout << FindGreatestSumOfSubArray(data, sizeof(data)/sizeof(data[0]))<<endl;*/
 	//cout << NumberOf1Between1AndN(15) << endl;
-	cout << digitAtIndex2(20) << endl;
+	//cout << digitAtIndex2(20) << endl;
+
+	int values[16] = { 1,10,3,8,12,2,9,6,5,7,4,11,3,7,16,6 };
+	int max=getMaxValue_solution2(values, 4, 4);
+	cout << "礼物的最大值为" << max << endl;
 	return 0;
 }

@@ -32,3 +32,4 @@ using std::set;
 using std::greater;
 using std::less;
 using std::pow;
+using std::max;

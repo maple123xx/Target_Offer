@@ -828,36 +828,36 @@ int NumberOf1(unsigned int i) {
 	return number;
 }
 //面试题44：数字序列中某一位的数字
-//int digitAtIndex(int index) {//数字以01234567891011...的格式序列化到一个字符序列中，求任意第n位对应的数字
-//	if (index < 1)
-//		return -1;
-//	int digit = 1;
-//	while (1) {
-//		int number = countOfIntegers(digit);
-//		if (index < digit*number)
-//			return digitAtIndex(index, digit);
-//		index -= digit*number;
-//		++digit;
-//	}
-//}
-//int countOfIntegers(int digit) {//这个函数得到m位的数字有多少个
-//	if (digit == 1)
-//		return 10;
-//	int count = static_cast<int>(pow(10, digit - 1));	//因为pow返回的是double类型的，所以要转型
-//	return 9 * count;
-//}
-//int digitAtIndex(int index, int digit) {
-//	int number = beginNumber(digit) + index / digit;
-//	int indexFromRight = digit - index % digit;
-//	for (int i = 1; i < indexFromRight; ++i)
-//		number /= 10;
-//	return number % 10;
-//}
-//int beginNumber(int digit) {	//m位数的第一个数字
-//	if (digit == 1)
-//		return 10;
-//	return static_cast<int>(pow(10, digit - 1));
-//}
+int digitAtIndex(int index) {//数字以01234567891011...的格式序列化到一个字符序列中，求任意第n位对应的数字
+	if (index < 1)
+		return -1;
+	int digit = 1;
+	while (1) {
+		int number = countOfIntegers(digit);
+		if (index < digit*number)
+			return digitAtIndex(index, digit);
+		index -= digit*number;
+		++digit;
+	}
+}
+int countOfIntegers(int digit) {//这个函数得到m位的数字有多少个
+	if (digit == 1)
+		return 10;
+	int count = static_cast<int>(pow(10, digit - 1));	//因为pow返回的是double类型的，所以要转型
+	return 9 * count;
+}
+int digitAtIndex(int index, int digit) {
+	int number = beginNumber(digit) + index / digit;
+	int indexFromRight = digit - index % digit;
+	for (int i = 1; i < indexFromRight; ++i)
+		number /= 10;
+	return number % 10;
+}
+int beginNumber(int digit) {	//m位数的第一个数字
+	if (digit == 1)
+		return 10;
+	return static_cast<int>(pow(10, digit - 1));
+}
 int digitAtIndex2(int n) {
 	//法二：从0开始枚举,把每一位的位数都累加起来
 	int sum = 0;
@@ -868,8 +868,8 @@ int digitAtIndex2(int n) {
 			++current;
 		}
 		else {
-			int diff = n - (sum - digit2(current))+1;
-			int indexFromRight = digit2(current) - diff + 1;
+			int diff = n - (sum - digit2(current))+1;		//diff表示这个数字的第几位
+			int indexFromRight = digit2(current) - diff + 1;	//表示从由开始数第几位
 			for (int i = 1; i < indexFromRight; ++i) {
 				current /= 10;
 			}
@@ -888,4 +888,49 @@ int digit2(int current) {
 		}
 		return count;
 	}
+}
+//面试题47：礼物的最大值
+int getMaxValue_solution1(const int* values, int rows, int cols) {
+	if (values == nullptr || rows < 0 || cols < 0)
+		return 0;
+	int **maxValues = new int*[rows];
+	for (int i = 0; i < rows; ++i) {
+		maxValues[i] = new int[cols];
+	}
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < cols; ++j) {
+			int up = 0;
+			int left = 0;
+			if (i > 0)
+				up = maxValues[i - 1][j];
+			if (j > 0)
+				left = maxValues[i][j - 1];
+			maxValues[i][j] = max(up, left) + values[i*cols + j];
+		}
+	}
+	int maxValue = maxValues[rows - 1][cols - 1];
+	for (int i = 0; i < rows; ++i)
+		delete[] maxValues[i];
+	delete[] maxValues;
+	return maxValue;
+}
+int getMaxValue_solution2(const int* values, int rows, int cols) {
+	if (values == nullptr || rows < 0 || cols < 0)
+		return 0;
+	int *maxValues = new int[cols];
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < cols; ++j) {
+			int up = 0;
+			int left = 0;
+			if (i > 0)
+				up = maxValues[j];
+			if (j > 0)
+				left = maxValues[j - 1];
+			maxValues[j] = max(up, left) + values[i*cols + j];
+		}
+	}
+	int maxValue = maxValues[cols - 1];
+	delete[] maxValues;
+	return maxValue;
+
 }
