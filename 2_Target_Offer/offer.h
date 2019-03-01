@@ -120,5 +120,61 @@ int digitAtIndex2(int n);
 int digit2(int current);
 int getMaxValue_solution1(const int* values, int rows, int cols);
 int getMaxValue_solution2(const int* values, int rows, int cols);
+int GetUglyNumber_Solution1(int index);
+bool isUglyNumber(int number);
+int GetUglyNumber_Solution2(int index);
+int Min(int number1, int number2, int number3);
+char FirstNotRepeatingChar(char* pString);
+void DeleteFirstString(char string1[], char string2[]);
+void delete_char(char str[], char target);
+//面试题50题目二：字符流中第一个只出现一次的字符
+class CharStatistics{
+public:
+	CharStatistics() : index(0){
+		for (int i = 0; i < 256; ++i)
+			occurrence[i] = -1;
+	}
+
+	void Insert(char ch){
+		if (occurrence[ch] == -1)
+			occurrence[ch] = index;
+		else if (occurrence[ch] >= 0)
+			occurrence[ch] = -2;
+
+		index++;
+	}
+	char FirstAppearingOnce(){
+		char ch = '\0';
+		int minIndex = numeric_limits<int>::max();	//返回 编译器允许的int型数的最大值，即2147483647
+		for (int i = 0; i < 256; ++i){
+			if (occurrence[i] >= 0 && occurrence[i] < minIndex){
+				ch = (char)i;
+				minIndex = occurrence[i];
+			}
+		}
+		return ch;
+	}
+private:
+	// occurrence[i]: A character with ASCII value i;
+	// occurrence[i] = -1: The character has not found;
+	// occurrence[i] = -2: The character has been found for mutlple times
+	// occurrence[i] >= 0: The character has been found only once
+	int occurrence[256];
+	int index;	//index用来索引字符流的字符,大小没有意义，只要大于等于0，都表示只出现一次
+};
+void Delete_Repeat(char str[]);
+bool Anagram(char str1[], char str2[]);
+int GetNumberOfK(int *data, int length, int k);
+int GetFirstK(int *data, int k, int length, int start, int end);
+int GetLastK(int *data, int k, int length, int start, int end);
+int GetMissingNumber(int *data, int length);
+int GetNumberSameAsIndex(int *data, int length);
+void FindNumberAppearOnce(int *data, int length, int &num1, int &num2);
+unsigned int FindFirstBitIs1(int num);
+bool IsBit1(int num, unsigned int indexOf1);
+int FindNumberAppearOnce(int *data, int length);
+bool SumIsS(int *data, int length, int s, int *num1, int *num2);
+void ContinuousSequenceIsS(int sum);
+void printSequence(int small, int big);
 #endif // !offer_
 

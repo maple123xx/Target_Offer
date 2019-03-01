@@ -138,8 +138,37 @@ int main() {
 	//cout << NumberOf1Between1AndN(15) << endl;
 	//cout << digitAtIndex2(20) << endl;
 
-	int values[16] = { 1,10,3,8,12,2,9,6,5,7,4,11,3,7,16,6 };
+	/*int values[16] = { 1,10,3,8,12,2,9,6,5,7,4,11,3,7,16,6 };
 	int max=getMaxValue_solution2(values, 4, 4);
-	cout << "礼物的最大值为" << max << endl;
+	cout << "礼物的最大值为" << max << endl;*/
+	/*int ugly = GetUglyNumber_Solution1(1500);
+	cout << "丑数是" << ugly << endl;*/
+	/*char *string = "abcbcax";
+	char result = FirstNotRepeatingChar(string);
+	cout << result << endl;*/
+	/*char string1[] = "We are studenteeeeeew.";
+	char string2[] = "aeiou";
+	DeleteFirstString(string1, string2);
+	cout << "结果字符串为" << string1 << endl;
+	char string3[] = "charish";
+	delete_char(string3, 'e');
+	cout << "结果字符串为" << string3 << endl;*/
+	/*CharStatistics chars;
+	chars.Insert('g');
+	chars.Insert('o');
+	chars.Insert('g');
+	chars.Insert('p');
+	cout << "字符流中第一个只出现一次的字符是" << chars.FirstAppearingOnce() << endl;*/
+	/*char str[] = "google";
+	Delete_Repeat(str);
+	cout << "结果字符串为" << str << endl;*/
+	/*char str1[] = "silentaaee", str2[] = "listeneeaa";
+	if (Anagram(str1, str2))
+		cout << "是变位词" << endl;*/
+	/*int data[8] = { 2,4,3,6,3,2,5,5};
+	int a=0,b=0;
+	FindNumberAppearOnce(data, 8, a, b);
+	cout << a << b << endl;*/
+	ContinuousSequenceIsS(100);
 	return 0;
 }

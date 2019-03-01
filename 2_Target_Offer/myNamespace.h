@@ -11,6 +11,7 @@
 #include<stack>
 #include<set>
 #include <functional>//greater£¬lessÔÚfunctionalÀïÃæ
+#include <limits>
 
 using std::cout;
 using std::cin;
@@ -33,3 +34,4 @@ using std::greater;
 using std::less;
 using std::pow;
 using std::max;
+using std::numeric_limits;

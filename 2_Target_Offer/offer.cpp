@@ -932,5 +932,304 @@ int getMaxValue_solution2(const int* values, int rows, int cols) {
 	int maxValue = maxValues[cols - 1];
 	delete[] maxValues;
 	return maxValue;
-
+}
+//面试题49：丑数:只能被2，3，5整除的数
+int GetUglyNumber_Solution1(int index) {
+	//1是第一个丑数，求按从小到大的顺序的第1500个丑数
+	if (index <= 0)
+		return 0;
+	int number = 0;
+	int uglyFound = 0;
+	while (uglyFound < index) {
+		++number;
+		if (isUglyNumber(number))
+			++uglyFound;
+	}
+	return number;
+}
+bool isUglyNumber(int number) {
+	while (number % 2 == 0)
+		number /= 2;
+	while (number % 3 == 0)
+		number /= 3;
+	while (number % 5 == 0)
+		number /= 5;
+	return (number == 1) ? true : false;
+}
+int GetUglyNumber_Solution2(int index) {
+	if (index <= 0)
+		return 0;
+	int *UglyNumbers = new int[index];
+	UglyNumbers[0] = 1;
+	int nextUglyIndex = 1;
+	int *Multiply2 = UglyNumbers;
+	int *Multiply3 = UglyNumbers;
+	int *Multiply5 = UglyNumbers;
+	while (nextUglyIndex < index) {
+		int min = Min(*Multiply2 * 2, *Multiply3 * 3, *Multiply5 * 5);
+		UglyNumbers[nextUglyIndex] = min;
+		while (*Multiply2 * 2 <= UglyNumbers[nextUglyIndex])
+			++Multiply2;
+		while (*Multiply3 * 3 <= UglyNumbers[nextUglyIndex])
+			++Multiply3;
+		while (*Multiply5 * 5 <= UglyNumbers[nextUglyIndex])
+			++Multiply5;
+		++nextUglyIndex;
+	}
+	int ugly = UglyNumbers[index - 1];
+	delete[] UglyNumbers;
+	return ugly;
+}
+int Min(int number1, int number2, int number3) {
+	int min = (number1 < number2) ? number1 : number2;
+	return (min < number3) ? min : number3;
+}
+//面试题50：第一次只出现一次的字符
+char FirstNotRepeatingChar(char* pString) {
+	if (pString == nullptr)
+		return '\0';
+	const int tableSize = 256;
+	unsigned int hashTable[tableSize];
+	for (auto i = 0; i < tableSize; ++i)
+		hashTable[i] = 0;
+	char *pHashKey = pString;
+	while (*pHashKey != '\0') {
+		hashTable[*(pHashKey++)]++;
+	}
+	pHashKey = pString;
+	while (*pHashKey != '\0') {
+		if (hashTable[*pHashKey] == 1)
+			return *pHashKey;
+		pHashKey++;
+	}
+	return '\0';
+}
+//相关题目：输入两个字符串，从第一个字符串中删除在第二个字符串中出现的所有字符
+void DeleteFirstString(char string1[], char string2[]) {
+	const int tableSize = 256;
+	unsigned int hashTable[tableSize];
+	for (auto i = 0; i < 256; ++i)
+		hashTable[i] = 0;
+	char *hashKey = string2;
+	while (*hashKey != '\0')
+		hashTable[*(hashKey++)]++;
+	char *p = string1,*q=string1;
+	for (; *p != '\0'; q++) {
+		if (hashTable[*q] != 1)
+			*p++=*q;
+	}
+	*p='\0';
+}
+void delete_char(char str[], char c)
+{
+	//删除字符串中的指定字符
+	char *p = str, *q = str;
+	for (; *q != '\0'; q++)
+	{
+		if (*q != c)
+			*p++ = *q;
+	}
+	*p = '\0';
+}
+void Delete_Repeat(char str[]) {
+	//删除字符串中重复的字符
+	bool hashTable[256] = { false };
+	char *p = str,*q=str;
+	while (*q != '\0') {
+		if (hashTable[*q] == false) {
+			hashTable[*q] = true;
+			*p++ = *q;
+		}
+		q++;
+	}
+	*p = '\0';
+}
+bool Anagram(char str1[], char str2[]) {
+	//判断两个字符串是否为变位词
+	unsigned int hashTable[256] = {0};
+	char *p = str1;
+	while (*p != '\0')
+		hashTable[*(p++)]++;
+	char *q = str2;
+	while (*q != '\0') {
+		hashTable[*(q++)]--;
+	}
+	for (auto i = 0; i < 256; ++i) {
+		if (hashTable[i] != 0)
+			return false;
+	}
+	return true;
+}
+//面试题51：数组中的逆序对
+//面试题52：两个链表的第一个公共节点在数据结构里面写过
+//面试题53：在排序数组中查找数字
+int GetNumberOfK(int *data, int length, int k) {
+	//统计一个数字在排序数组中出现的次数，如{1，2，3，3，3，3，4，5}和数字3，3出现了4次，O(logn)的时间复杂度
+	int number = 0;
+	int first = GetFirstK(data, k, length, 0, length - 1);
+	int last = GetLastK(data, k, length, 0, length - 1);
+	if(first>-1&&last>-1)
+		number = last - first + 1;
+	return number;
+}
+int GetFirstK(int *data, int k, int length, int start, int end) {
+	if (start > end)
+		return -1;
+	int middleIndex = (start + end) / 2;
+	int middleData = data[middleIndex];
+	if (middleData == k) {
+		if ((middleIndex > 0 && data[middleIndex - 1] != k) || middleIndex == 0)//如果前一个值不是k,说明middleIndex是第一个k
+			return middleIndex;
+		else
+			end = middleIndex - 1;
+	}
+	else if (middleData < k)
+		start = middleIndex + 1;
+	else
+		end = middleIndex - 1;
+	return GetFirstK(data, k, length, start, end);
+}
+int GetLastK(int *data, int k, int length, int start, int end) {
+	if (start > end)
+		return -1;
+	int middleIndex = (start + end) / 2;
+	int middleData = data[middleIndex];
+	if (middleData == k) {
+		if ((middleIndex < length - 1 && data[middleIndex + 1] != k) || middleIndex == length - 1)//同理
+			return middleIndex;
+		else
+			start = middleIndex + 1;
+	}
+	else if (middleData < k)
+		start = middleIndex + 1;
+	else
+		end = middleIndex - 1;
+	return GetLastK(data, k, length, start, end);
+}
+//面试题53题目二：0~n-1中缺失的数字
+int GetMissingNumber(int *data, int length) {
+	int left = 0;
+	int right = length - 1;
+	while (left <= right) {
+		int middle = (left + right) >> 1;
+		if (data[middle] != middle) {
+			if (middle == 0 || data[middle - 1] == middle - 1)//第一个不等于索引的值
+				return middle;
+			else
+				right = middle - 1;
+		}
+		else
+			left = middle + 1;
+	}
+	if (left == length)
+		return length;
+	return -1;
+}
+//面试题53题目三：单调递增数组中数值和下标相等的元素
+int GetNumberSameAsIndex(int *data, int length) {
+	int left = 0;
+	int right = length - 1;
+	while (left <= right) {
+		int middle = (left + right) / 2;
+		if (data[middle] == middle)
+			return middle;
+		else if (data[middle] > middle)
+			right = middle - 1;
+		else
+			left = middle + 1;
+	}
+	return -1;
+}
+//面试题56题目一：数组中只出现一次的两个数字
+void FindNumberAppearOnce(int *data, int length, int &num1, int &num2) {
+	//数组中除了2个数字，其他数字都出现了两次，那么异或两次后就得0
+	int resultExclusiveOR = 0;
+	for (int i = 0; i < length; ++i) {
+		resultExclusiveOR ^= data[i];
+	}
+	unsigned int indexOf1 = FindFirstBitIs1(resultExclusiveOR);
+	for (int i = 0; i < length; ++i) {
+		if (IsBit1(data[i], indexOf1))
+			num1 ^= data[i];
+		else
+			num2 ^= data[i];
+	}
+}
+unsigned int FindFirstBitIs1(int num) {
+	int indexBit = 0;
+	while (((num & 1) == 0) && (indexBit < 8 * sizeof(int))) {
+		num = num >> 1;
+		indexBit++;
+	}
+	return indexBit;
+}
+bool IsBit1(int num, unsigned int indexOf1) {
+	num = num >> indexOf1;
+	return (num & 1);
+}
+//面试题56题目二：数组中只有一个数出现1次，其他数出现3次
+int FindNumberAppearOnce(int *data, int length) {
+	int bitSum[32] = { 0 };
+	for (int i = 0; i < length; ++i) {
+		int bitMask = 1;
+		for (int j = 31; j >= 0; --j) {
+			int bit = (data[i] & bitMask);
+			if (bit != 0)
+				bitSum[j] += 1;
+			bitMask = bitMask << 1;
+		}
+	}
+	int result = 0;
+	for (int i = 0; i < 32; ++i) {
+		result = result << 1;
+		result += bitSum[i] % 3;
+	}
+	return result;
+}
+//面试题57题目一：和为s的数字
+bool SumIsS(int *data, int length, int s, int *num1, int *num2) {
+	//在递增数组中找到和为s的两个数，如果有多对，只输出一对
+	int left = 0;
+	int right = length - 1;
+	bool found = false;
+	while (left < right) {
+		if ((data[left] + data[right]) == s) {
+			*num1 = data[left];
+			*num2 = data[right];
+			found = true;
+			break;
+		}
+		else if ((data[left] + data[right]) < s)
+			++left;
+		else
+			--right;
+	}
+	return found;
+}
+//面试题57题目二：和为s的连续正数序列
+void ContinuousSequenceIsS(int sum) {
+	if (sum < 3)
+		return;
+	int small = 1;
+	int big = 2;
+	int middle = (sum + 1) / 2;
+	int curSum = small + big;
+	while (small < middle) {
+		if (curSum == sum)
+			printSequence(small, big);
+		while (curSum > sum) {
+			curSum -= small;
+			small++;
+			if (curSum == sum)
+				printSequence(small, big);
+		}
+		big++;
+		curSum += big;
+	}
+}
+void printSequence(int small, int big) {
+	for (int i = small; i <= big; ++i) {
+		cout << i << '\t';
+	}
+	cout << endl;
 }
