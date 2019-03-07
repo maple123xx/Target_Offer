@@ -169,6 +169,23 @@ int main() {
 	int a=0,b=0;
 	FindNumberAppearOnce(data, 8, a, b);
 	cout << a << b << endl;*/
-	ContinuousSequenceIsS(100);
+	/*int result = SumWithBit(25, 178);
+	cout << result << endl;
+	double input[5] = { 1,2,0,4,5 };
+	double output[5] = { 0,0,0,0,0 };
+	vector<double> a = vector<double>(input, input + sizeof(input) / sizeof(double));
+	vector<double> b = vector<double>(output, output + sizeof(output) / sizeof(double));
+	mutiply(a, b);
+	vector<double>::iterator i = b.begin();
+	for (; i != b.end(); ++i) {
+		cout << *i << '\t';
+	}
+	cout << endl;*/
+	const char *string = "0";
+	int result = StrToInt(string);
+	if (result == 0)
+		printf("the input %s is invalid.\n", string);
+	else
+		printf("number for %s is: %d.\n", string, result);
 	return 0;
 }

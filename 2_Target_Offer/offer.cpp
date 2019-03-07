@@ -1233,3 +1233,178 @@ void printSequence(int small, int big) {
 	}
 	cout << endl;
 }
+//面试题58题目一：翻转字符串
+void Reverse(char *begin, char *end) {
+	if (begin == nullptr || end == nullptr)
+		return;
+	while (begin < end) {
+		char temp = *begin;
+		*begin = *end;
+		*end = temp;
+
+		begin++;
+		end--;
+	}
+}
+void ReverseSentence(char *data) {
+	//输入“I am a student.”，输出“student. a am I”
+	if (data == nullptr)
+		return;
+	char *begin = data, *end = data;
+	while (*end != '\0')
+		++end;
+	end--;
+	Reverse(begin, end);
+	begin = end = data;
+	while (*begin != '\0') {
+		if (*begin == ' ') {//这种情况是连续多个空格的情况
+			++begin;
+			++end;
+		}
+		else if (*end == ' ' || *end == '\0') {
+			Reverse(begin, --end);
+			begin = ++end;
+		}
+		else
+			++end;
+	}
+}
+//面试题58题目二：翻转字符串
+char* LeftRotateString(char *str,int n) {
+	//输入“abcdefg”，输出“cdefgab”
+	if (str) {
+		int length = static_cast<int>(strlen(str));
+		if (length > 0 && n > 0 && n < length) {
+			char *firstStart = str;
+			char *firstEnd = str + n - 1;
+			char *secondStart = str + n;
+			char *secondEnd = str + length - 1;
+
+			Reverse(firstStart, firstEnd);
+			Reverse(secondStart, secondEnd);
+			Reverse(firstStart, secondEnd);
+		}
+	}
+	return str;
+}
+//面试题61：扑克中的顺子
+bool isContinue(int *data, int length) {
+	//判断连续的n张牌是否是顺子，0可代替任意数
+	int numberZero = 0;//0的个数
+	int numberGap = 0;//间隔大小
+	bucketSort(data, length);
+	for (int i = 0; i < length; ++i) {
+		if (data[i] == 0)
+			++numberZero;
+	}
+	int small = 0;
+	int big = small + 1;
+	for (int i = 0; i < length; ++i) {
+		if (data[small] == data[big])
+			return false;
+		numberGap = data[big] - data[small] - 1;
+		small = big;
+		++big;
+	}
+	return (numberZero >= numberGap) ? true : false;
+}
+void bucketSort(int *data,int length) {
+	int bucket[14] = { 0 };
+	for (int i = 0; i < length; ++i) {
+		bucket[data[i]]++;
+	}
+	int index = 0;
+	for (int i = 0; i < 14; ++i) {
+		while (bucket[i]) {
+			data[index++] = i;
+			--bucket[i];
+		}
+	}
+}
+//面试题63：股票的最大利润
+int MaxDiff(const int *data, unsigned int length) {
+	if (data == nullptr || length < 2)
+		return 0;
+	int min = data[0];
+	int maxDiff = data[1] - min;
+	for (unsigned int i = 2; i < length; ++i) {
+		if (data[i - 1] < min)
+			min = data[i - 1];
+		int currDiff = data[i] - min;
+		if (currDiff > maxDiff)
+			maxDiff = currDiff;
+	}
+	return maxDiff;
+}
+//面试题65：不用加减乘除号进行两个数的相加
+int SumWithBit(int num1, int num2) {
+	int sum = 0;
+	int carry = 0;
+	do {
+		sum = num1^num2;//只加不进位的
+		carry = (num1&num2) << 1;//进位
+		num1 = sum;
+		num2 = carry;
+	} while (carry != 0);
+	return sum;
+}
+//面试题66：构建乘积数组
+void mutiply(const vector<double>& input, vector<double>& output) {
+	//题目：给定一个数组A[0, 1, …, n - 1]，请构建一个数组B[0, 1, …, n - 1]，其
+	//中B中的元素B[i] = A[0]×A[1]×… ×A[i - 1]×A[i + 1]×…×A[n - 1]。不能使用除法。
+	size_t length1 = input.size();
+	size_t length2 = output.size();
+	if (length1 == length2&&length2 > 1) {
+		output[0] = 1;	//相当于c[0]
+		for (int i = 1; i < length1; ++i) {
+			output[i] = output[i - 1] * input[i - 1];
+		}
+		double temp = 1;//相当于d[n-1]
+		for (size_t i = length1 - 2; i >= 0; --i) {
+			temp *= input[i + 1];
+			output[i] *= temp;
+		}
+	}
+}
+// 面试题67：把字符串转换成整数
+// 题目：请你写一个函数StrToInt，实现把字符串转换成整数这个功能。当然，不
+// 能使用atoi或者其他类似的库函数。
+enum Status { Valid = 0, Invalid };
+int g_Status = Valid;
+long long StrToIntCore(const char *str, bool minus) {
+	long long num = 0;
+	while (*str != '\0') {
+		if ((*str >= '0'&&*str <= '9')) {
+			int flag = minus ? -1 : 1;
+			num = num * 10 + flag*(*str - '0');
+			if ((!minus&&num > 0x7FFFFFFF) || (minus&&num < (signed int)0x80000000)) {
+				num = 0;
+				break;
+			}
+			++str;
+		}
+		else{
+			num = 0;
+			break;
+		}
+	}
+	if (*str == '\0')
+		g_Status = Valid;
+	return num;
+}
+int StrToInt(const char* str) {
+	g_Status = Invalid;
+	long long num = 0;
+	if (str != nullptr || *str != '\0') {
+		bool minus = false;
+		if (*str == '+')
+			++str;
+		if (*str == '-') {
+			minus = true;
+			++str;
+		}
+		if (*str != '\0')
+			num = StrToIntCore(str, minus);
+	}
+	return (int)num;
+}

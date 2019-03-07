@@ -176,5 +176,15 @@ int FindNumberAppearOnce(int *data, int length);
 bool SumIsS(int *data, int length, int s, int *num1, int *num2);
 void ContinuousSequenceIsS(int sum);
 void printSequence(int small, int big);
+void Reverse(char *begin, char *end);
+void ReverseSentence(char *data);
+char* LeftRotateString(char *str, int n);
+bool isContinue(int *data, int length);
+void bucketSort(int *data, int length);
+int MaxDiff(const int *data, unsigned int length);
+int SumWithBit(int num1, int num2);
+void mutiply(const vector<double>& input, vector<double>& output);
+long long StrToIntCore(const char *str, bool minus);
+int StrToInt(const char* str);
 #endif // !offer_
 

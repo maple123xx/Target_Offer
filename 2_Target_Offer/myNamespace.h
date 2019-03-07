@@ -35,3 +35,4 @@ using std::less;
 using std::pow;
 using std::max;
 using std::numeric_limits;
+using std::strlen;
