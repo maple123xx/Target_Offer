@@ -25,6 +25,12 @@ bool isSymmetry(BTNode *root1, BTNode *root2);
 void LevelPrint(BTNode *root);
 void LevelPrint2(BTNode *root);
 void LevelPrint3(BTNode *root);
+int TreeDepth(BTNode *root);
+bool isBalanced1(BTNode *root);
+bool isBalanced2(BTNode *root);
+bool isBalanced2(BTNode *root, int *depth);
+BTNode *KthNode(BTNode *root, int k);
+BTNode *KthNodeCore(BTNode *root, int &k);
 
 
 bool Duplicate(int *A, int length, int *duplicate);
@@ -33,6 +39,37 @@ int countRange(const int *A, int length, int start, int end);
 bool Matrix_Find(int *A, int rows, int cols, int obj);
 void ReplaceBlank(char str[]);
 void copyBtoA(int *A, int *B, int a, int b);
+//面试题9：用两个栈实现队列
+template<typename T> class CQueue {
+public:
+	CQueue();
+	~CQueue();
+	void appendTail(const T& x);
+	T deleteHead();
+private:
+	stack<T> stack1;
+	stack<T> stack2;
+};
+template<typename T> CQueue<T>::CQueue(){}
+template<typename T> CQueue<T>::~CQueue(){}
+template<typename T> void CQueue<T>::appendTail(const T& x) {
+	stack1.push(x);
+}
+template<typename T> T CQueue<T>::deleteHead() {
+	if (stack2.size() <= 0) {
+		while (stack1.size() > 0) {
+			T& data = stack1.top();
+			stack2.push(data);
+			stack1.pop();
+		}
+	}
+	if (stack2.size() == 0)
+		throw new exception("queue is empty!");
+	T head = stack2.top();
+	stack2.pop();
+	return head;
+}
+
 long long Fibonacci(unsigned int n);
 int Rotate_Min(int *A, int length);
 int MinSequenceFind(int *A, int low, int high);
@@ -56,6 +93,35 @@ void PrintNumber(char *number);
 bool Increment(char* number);
 void Print1ToMaxOfNDigits_2(int n);
 void Print1ToMaxOfNDigitsRecursively(char* number, int length, int index);
+//面试题30：包含min函数的栈
+template<typename T> class StackWithMin {
+public:
+	StackWithMin();
+	~StackWithMin();
+	void push(const T& value);
+	void pop();
+	const T& min() const;
+private:
+	stack<T> m_data;
+	stack<T> m_min;
+};
+template<typename T> StackWithMin<T>::StackWithMin(){}
+template<typename T> StackWithMin<T>::~StackWithMin() {}
+template<typename T> void StackWithMin<T>::push(const T& value) {
+	m_data.push(value);
+	if (m_min.size() == 0 || value < m_min.top())
+		m_min.push(value);
+	else
+		m_min.push(m_min.top());
+}
+template<typename T> void StackWithMin<T>::pop() {
+	m_data.pop();
+	m_min.pop();
+}
+template<typename T> const T& StackWithMin<T>::min() const {
+	//assert(m_data.size() > 0 && m_min.size() > 0);
+	return m_min.top();
+}
 bool isPopOrder(const int *pPush, const int *pPop, int length);
 bool VerifySequenceOfBST(int Sequence[], int length);
 bool CheckMoreThanHalf(int *num, int length, int number);
@@ -181,10 +247,18 @@ void ReverseSentence(char *data);
 char* LeftRotateString(char *str, int n);
 bool isContinue(int *data, int length);
 void bucketSort(int *data, int length);
+int LastRemaining(unsigned int n, unsigned int m);
 int MaxDiff(const int *data, unsigned int length);
 int SumWithBit(int num1, int num2);
 void mutiply(const vector<double>& input, vector<double>& output);
 long long StrToIntCore(const char *str, bool minus);
 int StrToInt(const char* str);
+
+bool match(const char* str, const char* pattern);
+bool matchCore(const char* str, const char* pattern);
+bool isNumberic(const char *str);
+bool scanInteger(const char **str);
+bool scanUnsignedInteger(const char **str);
+
 #endif // !offer_
 

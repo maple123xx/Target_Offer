@@ -143,7 +143,6 @@ void copyBtoA(int *A, int *B,int a ,int b) {
 }
 //面试题6：从头到尾打印链表，在数据结构里面已经写过了
 //面试题7：重建二叉树，在数据结构里面已经写过了
-
 //面试题8：二叉树的下一个节点
 BTNode *CreateBTNode(ElemType data) {
 	BTNode *pNode = new BTNode();
@@ -203,7 +202,7 @@ void DestroyTree(BTNode *root) {
 		DestroyTree(right);
 	}
 }
-
+//面试题9：用两个栈实现队列，写在头文件中了
 //面试题10：斐波那契数列
 long long Fibonacci(unsigned int n) {
 	/*if (n == 0)	//递归：效率低
@@ -559,6 +558,7 @@ bool isSymmetry(BTNode *root1, BTNode *root2) {
 	return isSymmetry(root1->lchild, root2->rchild) && isSymmetry(root1->rchild, root2->lchild);
 
 }
+//面试题30：包含min函数的栈在头文件中
 //面试题31：栈的压入、弹出序列
 bool isPopOrder(const int *pPush, const int *pPop, int length) {
 	//所有数字不等，判断弹出序列是否正确，比如压入序列为{1，2，3，4，5},{4，5，3，2，1}就是一个正确的弹出序列
@@ -1167,6 +1167,66 @@ bool IsBit1(int num, unsigned int indexOf1) {
 	num = num >> indexOf1;
 	return (num & 1);
 }
+//面试题55题目一：树的深度
+int TreeDepth(BTNode *root) {
+	if (root == nullptr)
+		return 0;
+	int left = TreeDepth(root->lchild);
+	int right = TreeDepth(root->rchild);
+	return (left > right) ? (1 + left) : (1 + right);
+}
+//面试题54：二叉搜索树的第K个节点
+BTNode *KthNode(BTNode *root,int k) {
+	if (root == nullptr)
+		return nullptr;
+	return KthNodeCore(root, k);
+}
+BTNode *KthNodeCore(BTNode *root, int &k) {
+	BTNode *target = nullptr;
+	if (root->lchild != nullptr)
+		target=KthNodeCore(root->lchild, k);
+	if (target == nullptr) {
+		if (k == 1)
+			return root;
+		--k;
+	}
+	if(target==nullptr&&root->rchild != nullptr)
+		target = KthNodeCore(root->rchild, k);
+	return target;
+}
+//面试题55题目二：判断是否是平衡二叉树
+bool isBalanced1(BTNode *root) {
+	if (root == nullptr)
+		return true;
+	int left = TreeDepth(root->lchild);
+	int right = TreeDepth(root->rchild);
+	int diff = left - right;
+	if (diff < -1 || diff > 1) {
+		return false;
+	}
+	return isBalanced1(root->lchild) && isBalanced1(root->rchild);
+}
+bool isBalanced2(BTNode *root) {
+	int depth = 0;
+	return isBalanced2(root, &depth);
+}
+bool isBalanced2(BTNode *root, int  *depth) {
+	//在遍历某节点的左右节点后，我们可以根据它的左右节点的深度判断它是不是平衡的，并得到当前节点的深度。当最后遍历到树的根节点时，
+	//也就判断了整个二叉树是不是平衡的了
+	if (root == nullptr) {
+		*depth = 0;
+		return true;
+	}
+	int left, right;
+	if (isBalanced2(root->lchild, &left) && isBalanced2(root->rchild, &right)) {
+		int diff = left - right;
+		if (diff <= 1 && diff >= -1) {
+			*depth = 1 + ((left > right) ? left : right);
+			return true;
+		}
+	}
+	return false;
+}
 //面试题56题目二：数组中只有一个数出现1次，其他数出现3次
 int FindNumberAppearOnce(int *data, int length) {
 	int bitSum[32] = { 0 };
@@ -1321,6 +1381,29 @@ void bucketSort(int *data,int length) {
 		}
 	}
 }
+//面试题62：圆圈中最后剩下的数字
+int LastRemaining(unsigned int n, unsigned int m) {
+	if (n < 1 || m < 1)
+		return -1;
+	list<int> numbers;
+	for (auto i = 0; i < n; ++i)
+		numbers.push_back(i);
+	list<int>::iterator current = numbers.begin();
+	while (numbers.size() > 1) {
+		for (unsigned int i = 1; i < m; ++i) {
+			++current;
+			if (current == numbers.end())
+				current = numbers.begin();
+		}
+		list<int>::iterator next = ++current;
+		if (next == numbers.end())
+			next = numbers.begin();
+		--current;
+		numbers.erase(current);
+		current = next;
+	}
+	return *current;
+}
 //面试题63：股票的最大利润
 int MaxDiff(const int *data, unsigned int length) {
 	if (data == nullptr || length < 2)
@@ -1407,4 +1490,58 @@ int StrToInt(const char* str) {
 			num = StrToIntCore(str, minus);
 	}
 	return (int)num;
+}
+
+// 面试题19：正则表达式匹配
+// 题目：请实现一个函数用来匹配包含'.'和'*'的正则表达式。模式中的字符'.'
+// 表示任意一个字符，而'*'表示它前面的字符可以出现任意次（含0次）,用pattern去匹配str，'aaaaabb'和'a*bb'匹配，
+//'*'表示它前面的字符可以出现任意次是值str里面的字符重复多次
+bool match(const char* str, const char* pattern) {
+	if (str == nullptr || pattern == nullptr)
+		return false;
+	return matchCore(str, pattern);
+}
+bool matchCore(const char* str, const char* pattern) {
+	if (*str == '\0'&&*pattern == '\0')
+		return true;
+	if (*str != '\0'&&*pattern == '\0')//str还有，模式没了，肯定不匹配；要是str没了，模式还有是可能匹配的
+		return false;
+	if (*(pattern + 1) == '*') {
+		if ((*pattern == *str) || (*pattern == '.'&&*str != '\0')) {
+			return matchCore(str + 1, pattern + 2) || matchCore(str + 1, pattern) || matchCore(str, pattern + 2);
+		}
+		else
+			return matchCore(str, pattern + 2);
+	}
+	if ((*str == *pattern) || (*pattern == '.'&&*str != '\0')) {
+		return matchCore(str + 1, pattern + 1);
+	}
+	return false;
+}
+
+//面试题二十：表示数值的字符串
+bool isNumberic(const char *str) {
+	if (str == nullptr)
+		return false;
+	bool numberic = scanInteger(&str);
+	if (*str == '.') {
+		++str;
+		numberic = scanUnsignedInteger(&str) || numberic;
+	}
+	if (*str == 'E' || *str == 'e') {
+		++str;
+		numberic = numberic&&scanInteger(&str);
+	}
+	return numberic && (*str == '\0');
+}
+bool scanInteger(const char **str) {
+	if (**str == '+' || **str == '-')
+		++(*str);
+	return scanUnsignedInteger(str);
+}
+bool scanUnsignedInteger(const char **str) {
+	const char *before = *str;
+	while (**str != '\0'&&**str >= '0' && **str <= '9')
+		++(*str);
+	return *str > before;
 }

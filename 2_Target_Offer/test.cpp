@@ -181,11 +181,45 @@ int main() {
 		cout << *i << '\t';
 	}
 	cout << endl;*/
-	const char *string = "0";
+	/*const char *string = "0";
 	int result = StrToInt(string);
 	if (result == 0)
 		printf("the input %s is invalid.\n", string);
 	else
-		printf("number for %s is: %d.\n", string, result);
+		printf("number for %s is: %d.\n", string, result);*/
+	cout << endl;
+	/*CQueue<char> queue;
+	queue.appendTail('a');
+	queue.appendTail('b');
+	queue.appendTail('c');
+	char head = queue.deleteHead();
+	head = queue.deleteHead();
+	queue.appendTail('d');
+	head = queue.deleteHead();
+	cout << head << endl;*/
+	/*StackWithMin<int> stack;
+	stack.push(3);
+	stack.push(4);
+	stack.push(2);
+	stack.push(1);
+	stack.pop();
+	cout << stack.min()<<endl;
+	stack.pop();
+	cout << stack.min() << endl;
+	stack.pop();
+	cout << stack.min() << endl;*/
+	/*BTNode *pNode1 = CreateBTNode(1);
+	BTNode *pNode2 = CreateBTNode(2);
+	BTNode *pNode3 = CreateBTNode(3);
+	BTNode *pNode4 = CreateBTNode(4);
+	BTNode *pNode5 = CreateBTNode(5);
+	BTNode *pNode6 = CreateBTNode(6);
+	ConnectTreeNode(pNode1, pNode2, pNode3);
+	ConnectTreeNode(pNode2, pNode4, pNode5);
+	ConnectTreeNode(pNode4, pNode6, nullptr);
+	BTNode *p = KthNode(pNode1, 3);
+	cout << p->data;*/
+	if (isNumberic(".e1"))
+		cout << "ÕýÈ·" << endl;
 	return 0;
 }
