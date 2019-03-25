@@ -19,6 +19,7 @@ using std::cin;
 using std::endl;
 using std::ifstream;
 using std::ofstream;
+using std::ostream;
 using std::string;
 using std::vector;
 using std::list;

@@ -810,23 +810,6 @@ int FindGreatestSumOfSubArray(int *data, int length){
 	}
 	return GreatestSum;
 }
-//面试题43：1~n整数中1出现的次数
-int NumberOf1Between1AndN(unsigned int n) {//简单解法
-	int number = 0;
-	for (unsigned int i = 1; i <= n; ++i) {
-		number += NumberOf1(i);
-	}
-	return number;
-}
-int NumberOf1(unsigned int i) {
-	int number = 0;
-	while (i) {
-		if (i % 10 == 1)
-			++number;
-		i /= 10;
-	}
-	return number;
-}
 //面试题44：数字序列中某一位的数字
 int digitAtIndex(int index) {//数字以01234567891011...的格式序列化到一个字符序列中，求任意第n位对应的数字
 	if (index < 1)
@@ -1386,7 +1369,7 @@ int LastRemaining(unsigned int n, unsigned int m) {
 	if (n < 1 || m < 1)
 		return -1;
 	list<int> numbers;
-	for (auto i = 0; i < n; ++i)
+	for (unsigned int i = 0; i < n; ++i)
 		numbers.push_back(i);
 	list<int>::iterator current = numbers.begin();
 	while (numbers.size() > 1) {
@@ -1520,6 +1503,9 @@ bool matchCore(const char* str, const char* pattern) {
 }
 
 //面试题二十：表示数值的字符串
+// 题目：请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，
+// 字符串“+100”、“5e2”、“-123”、“3.1416”及“-1E-16”都表示数值，但“12e”、
+// “1a3.14”、“1.2.3”、“+-5”及“12e+5.4”都不是
 bool isNumberic(const char *str) {
 	if (str == nullptr)
 		return false;
@@ -1544,4 +1530,437 @@ bool scanUnsignedInteger(const char **str) {
 	while (**str != '\0'&&**str >= '0' && **str <= '9')
 		++(*str);
 	return *str > before;
+}
+
+ListNode *CreateListNode(ElemType value) {
+	ListNode *node = new ListNode();
+	node->data = value;
+	node->next = nullptr;
+	return node;
+}
+void ConnectListNodes(ListNode *pCurrent, ListNode *pNext) {
+	if (pCurrent == nullptr) {
+		printf("Error to connect two nodes.\n");
+		exit(1);
+	}
+	pCurrent->next = pNext;
+}
+void PrintList2(ListNode *pHead) {
+	ListNode *p = pHead;
+	while (p) {
+		cout << p->data << '\t';
+		p = p->next;
+	}
+	cout << endl;
+}
+//面试题二十三：链表中的入口节点
+ListNode *MeetingNode(ListNode *pHead) {
+	ListNode *slow = pHead->next;
+	if (slow == nullptr)
+		return nullptr;
+	ListNode *fast = slow->next;
+	while (slow&&fast) {
+		if (slow == fast)
+			return fast;
+		slow = slow->next;
+		fast = fast->next;
+		if (fast)
+			fast = fast->next;
+	}
+	return nullptr;
+}
+ListNode *EntryNode(ListNode *pHead) {
+	ListNode *meetNode = MeetingNode(pHead);
+	if (meetNode == nullptr)
+		return nullptr;
+	ListNode *node1 = meetNode;
+	int nodeInLoop = 1;
+	while (node1->next != meetNode) {
+		node1 = node1->next;
+		++nodeInLoop;
+	}
+	node1 = pHead;
+	for (int i = 0; i < nodeInLoop; ++i) {
+		node1 = node1->next;
+	}
+	ListNode *node2 = pHead;
+	while (node1 != node2) {
+		node1 = node1->next;
+		node2 = node2->next;
+	}
+	return node1;
+}
+//面试题三十五：复杂链表的复制
+ComplexNode* CreateNode(int nValue){
+	ComplexNode* pNode = new ComplexNode();
+
+	pNode->data = nValue;
+	pNode->next = nullptr;
+	pNode->sibling = nullptr;
+
+	return pNode;
+}
+void BuildNodes(ComplexNode* pNode, ComplexNode* pNext, ComplexNode* pSibling)
+{
+	if (pNode != nullptr){
+		pNode->next = pNext;
+		pNode->sibling = pSibling;
+	}
+}
+void PrintList3(ComplexNode* pHead){
+	ComplexNode* pNode = pHead;
+	while (pNode != nullptr){
+		cout << pNode->data << endl;
+		if (pNode->sibling)
+			cout << pNode->sibling->data << endl;
+		else
+			cout << "No siblings. " << endl;
+		pNode = pNode->next;
+	}
+}
+void CloneNodes(ComplexNode *pHead) {
+	ComplexNode *p = pHead;
+	while (p!=nullptr) {
+		ComplexNode* pClone = new ComplexNode();
+		pClone->data = p->data;
+		pClone->sibling = nullptr;
+
+		pClone->next = p->next;
+		p->next = pClone;
+
+		p = pClone->next;
+	}
+}
+ComplexNode* ConnectSiblingNodes(ComplexNode *pHead) {
+	ComplexNode *p = pHead;
+	while (p) {
+		ComplexNode *pClone = p->next;
+		if (p->sibling != nullptr) {
+			pClone->sibling = p->sibling->next;
+		}
+		p = pClone->next;
+	}
+	return pHead;
+}
+ComplexNode* ReconnectNodes(ComplexNode *pHead) {
+	ComplexNode *p = pHead;
+	ComplexNode *pCloneHead = nullptr;
+	ComplexNode *pClone = nullptr;
+	if (p) {
+		pClone = pCloneHead = p->next;
+		p->next = pClone->next;
+		p = p->next;
+	}
+	while (p) {
+		pClone->next = p->next;
+		pClone = pClone->next;
+		p->next = pClone->next;
+		p = p->next;
+	}
+	return pCloneHead;
+}
+ComplexNode* Clone(ComplexNode *pHead) {
+	CloneNodes(pHead);
+	ComplexNode* p = ConnectSiblingNodes(pHead);
+	return ReconnectNodes(p);
+}
+//面试题三十六：二叉搜索树与双向链表
+BTNode* Convert(BTNode* root) {
+	BTNode *lastNode = nullptr;
+	ConvertNode(root, &lastNode);
+
+	BTNode *head = lastNode;
+	while (head != nullptr&&head->lchild != nullptr)
+		head = head->lchild;
+	return head;
+
+}
+void ConvertNode(BTNode* root, BTNode** lastNode) {
+	if (root == nullptr)
+		return;
+	if (root->lchild)
+		ConvertNode(root->lchild, lastNode);
+
+	root->lchild = *lastNode;
+	if (*lastNode != nullptr)
+		(*lastNode)->rchild = root;
+	*lastNode = root;
+
+	if (root->rchild)
+		ConvertNode(root->rchild, lastNode);
+}
+//面试题三十七：序列化二叉树没做完
+//void Serialize(BTNode *root,ostream& output) {
+//	if (root==nullptr) {
+//		output << '$,';
+//	}
+//	output << root->data << ',';
+//	Serialize(root->lchild, output);
+//	Serialize(root->rchild, output);
+//}
+//面试题三十八：字符串的排列
+void Permutation(char* str) {
+	if (str == nullptr)
+		return;
+	Permutation(str, str);
+}
+void Permutation(char* pStr, char* pBegin){
+	if (*pBegin == '\0'){
+		printf("%s\n", pStr);
+	}
+	else{
+		for (char* pCh = pBegin; *pCh != '\0'; ++pCh){
+			swap(*pBegin, *pCh);
+
+			Permutation(pStr, pBegin + 1);
+
+			swap(*pBegin, *pCh);
+		}
+	}
+}
+//面试题四十三：1`n整数中1出现的次数
+int NumberOf1Between1AndN_1(unsigned int n) {
+	int count = 0;
+	for (unsigned int i = 1; i <= n; ++i) {
+		count += NumberOf1_1(i);
+	}
+	return count;
+}
+int NumberOf1_1(unsigned int i) {
+	int number = 0;
+	while (i > 0) {
+		if ((i % 10) == 1)
+			++number;
+		i /= 10;
+	}
+	return number;
+}
+int NumberOf1Between1AndN_2(unsigned int n) {
+	if (n <= 0)
+		return 0;
+	char str[50];
+	sprintf_s(str, "%d", n);
+	return NumberOf1_2(str);
+
+}
+int NumberOf1_2(const char* str) {
+	if (str == nullptr || (*str) < '0' || (*str) > '9' || (*str) == '\0')
+		return 0;
+	int length;
+	length = static_cast<unsigned int>(strlen(str));
+	int first = *str-'0';
+	if (first == 0 && length == 1)
+		return 0;
+	if (first > 0 && length == 1)
+		return 1;
+	int FirstDigit = 0;
+	if (first > 1)
+		FirstDigit = PowerBase10(length - 1);
+	else
+		FirstDigit = atoi(str + 1) + 1;//str + 1表示指针移到str的下一位
+	int OtherDigit = 0;
+	OtherDigit = first*PowerBase10(length - 2)*(length - 1);
+	int numRecursive = NumberOf1_2(str + 1);
+
+	return FirstDigit + OtherDigit + numRecursive;
+}
+int PowerBase10(int n) {
+	int number = 1;
+	for (int i = 0; i < n; ++i) {
+		number *= 10;
+	}
+	return number;
+}
+//面试题四十八：最长不含重复字符的子字符串
+int LongestSubstringWithoutDuplication(const string& str) {
+	int currentLen = 0;
+	int maxLen = 0;
+	int *position = new int[26];
+	for (int i = 0; i < 26; ++i) {
+		position[i] = -1;
+	}
+	for(int i=0;i<str.size();++i){
+		int preLen = position[str[i] - 'a'];
+		if (preLen<0 || i - preLen>currentLen) {
+			++currentLen;
+		}
+		else {
+			if (currentLen > maxLen)
+				maxLen = currentLen;
+			currentLen = i - preLen;
+		}
+		position[str[i] - 'a'] = i;
+	}
+	if (currentLen > maxLen)
+		maxLen = currentLen;
+	delete[]position;
+	return maxLen;
+}
+
+//面试题五十九题目一：滑动窗口的最大值
+vector<int> MaxInWindows(const vector<int>& num, int len) {
+	vector<int> maxInWindow;
+
+	if (num.size() >= len&&len > -1) {
+
+		deque<int> index;
+
+		for (int i = 0; i < len; ++i) {
+			if (!index.empty() && num[i] >= num[index.back()])
+				index.pop_back();
+			index.push_back(i);
+		}
+
+		for (int i = len; i < num.size(); ++i) {
+			maxInWindow.push_back(num[index.front()]);
+			while (!index.empty() && num[i] >= num[index.back()])
+				index.pop_back();
+			if (!index.empty() && index.front() <= (i - len))
+				index.pop_front();
+			index.push_back(i);
+		}
+		maxInWindow.push_back(num[index.front()]);
+	}
+	return maxInWindow;
+}
+//面试题六十：n个色子的点数
+int dice = 6;
+void PrintProbability(int number) {
+	if (number < 1)
+		return;
+	int maxSum = dice*number;
+	int *probability = new int[maxSum-dice+1];
+	for (int i = number; i <= maxSum; ++i) {
+		probability[i-number] = 0;
+	}
+	Probability(number, probability);
+	double total = pow(dice, number);
+	for (int i = number; i <= maxSum; ++i) {
+		double ratio = (double)probability[i - number] / total;
+		cout << ratio << endl;
+	}
+	delete[] probability;
+}
+void Probability(int number, int *probability) {
+	for (int i = 1; i <= dice; ++i) {
+		Probability(number, number, i, probability);
+	}
+}
+void Probability(int original, int current, int sum, int *probability) {
+	if (current == 1) {
+		probability[sum - original]++;
+	}
+	else {
+		for (int i = 1; i <= dice; ++i) {
+			Probability(original, current - 1, i + sum, probability);
+		}
+	}
+}
+// 面试题64：求1+2+…+n
+// 题目：求1+2+…+n，要求不能使用乘除法、for、while、if、else、switch、case
+int Temp::N = 3;
+int Temp::Sum = 4;
+int Sum_Solution1(int n) {
+	Temp::Reset();
+	Temp *a = new Temp[n];
+	delete[] a;
+	a = nullptr;
+	return Temp::getSum();
+}
+
+A* array[2];
+class A {
+public:
+	virtual int Sum(int n) {
+		return 0;
+	}
+};
+class B :public A {
+public:
+	virtual int Sum(int n) {
+		return array[!!(n-1)]->Sum(n - 1) + n;
+	}
+};
+int Sum_Solution2(int n) {
+	A a;
+	B b;
+	array[0] = &a;
+	array[1] = &b;
+	int result = array[1]->Sum(n);
+	return result;
+}
+//方法三：
+int Solution3_Teminator(int n) {
+	return 0;
+}
+int Sum_Solution3(int n) {
+	static fun f[2] = { Solution3_Teminator,Sum_Solution3 };
+	return f[!!(n - 1)](n - 1) + n;
+}
+
+//面试题六十八：树中两个节点的最低公共祖先
+TreeNode* CreateTreeNode(ElemType value) {
+	TreeNode* node = new TreeNode();
+	node->data = value;
+	return node;
+}
+void ConnectTreeNodes(TreeNode* parent, TreeNode* child) {
+	if (parent != nullptr) {
+		parent->children.push_back(child);
+	}
+}
+void PrintNode(TreeNode* node) {
+	if (node != nullptr) {
+		cout << node->data << endl;
+		for (vector<TreeNode*>::const_iterator it = node->children.begin(); it != node->children.end(); ++it) {
+			cout << (*it)->data << '\t';
+		}
+		cout << endl;
+	}
+}
+void PrintTree(TreeNode* root) {
+	PrintNode(root);
+	if (root != nullptr) {
+		for (vector<TreeNode*>::const_iterator it = root->children.begin(); it != root->children.end(); ++it) {
+			PrintTree(*it);
+		}
+	}
+}
+void DestroyTree(TreeNode* root) {
+	if (root != nullptr) {
+		for (vector<TreeNode*>::const_iterator it = root->children.begin(); it != root->children.end(); ++it)
+			DestroyTree(*it);
+	}
+	delete root;
+}
+bool getNodePath(TreeNode* root, TreeNode* node, list<const TreeNode*>& path) {
+	if (root == node)
+		return true;
+	path.push_back(root);
+	bool found=false;
+	for (vector<TreeNode*>::const_iterator it = root->children.begin(); !found&&it != root->children.end(); ++it)
+			found=getNodePath(*it, node, path);
+	if (!found)
+		path.pop_back();
+	return found;
+}
+const TreeNode* getLastCommomNode(const list<const TreeNode*>& path1, const list<const TreeNode*>& path2) {
+	const TreeNode* last = nullptr;
+	list<const TreeNode*>::const_iterator it1 = path1.begin();
+	list<const TreeNode*>::const_iterator it2 = path2.begin();
+	while (it1 != path1.end() && it2 != path2.end()) {
+		if (*it1 == *it2)
+			last = *it1;
+		++it1;
+		++it2;
+	}
+	return last;
+}
+const TreeNode* getLastCommonParent(TreeNode* root, TreeNode* node1, TreeNode* node2) {
+	list<const TreeNode*> path1;
+	list<const TreeNode*> path2;
+	getNodePath(root, node1,path1);
+	getNodePath(root, node2, path2);
+	const TreeNode* last = getLastCommomNode(path1, path2);
+	return last;
 }

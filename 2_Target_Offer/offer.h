@@ -7,6 +7,29 @@ typedef double ElemType;
 typedef multiset<int, greater<int>> intSet;	//greater是求最大的那个值，greater是降序排序，less是升序排序
 typedef multiset<int, greater<int>>::iterator setIterator;
 
+struct ListNode {
+	ElemType data;
+	ListNode *next;
+};
+ListNode *CreateListNode(ElemType value);
+void ConnectListNodes(ListNode *pCurrent, ListNode *pNext);
+void PrintList2(ListNode *pHead);
+ListNode *MeetingNode(ListNode *pHead);
+ListNode *EntryNode(ListNode *pHead);
+
+struct ComplexNode {
+	ElemType data;
+	ComplexNode *next;
+	ComplexNode *sibling;
+};
+ComplexNode* CreateNode(int nValue);
+void BuildNodes(ComplexNode* pNode, ComplexNode* pNext, ComplexNode* pSibling);
+void PrintList3(ComplexNode* pHead);
+void CloneNodes(ComplexNode *pHead);
+ComplexNode* ConnectSiblingNodes(ComplexNode *pHead);
+ComplexNode* ReconnectNodes(ComplexNode *pHead);
+ComplexNode* Clone(ComplexNode *pHead);
+
 struct BTNode {
 	ElemType data;
 	BTNode *lchild;
@@ -31,7 +54,21 @@ bool isBalanced2(BTNode *root);
 bool isBalanced2(BTNode *root, int *depth);
 BTNode *KthNode(BTNode *root, int k);
 BTNode *KthNodeCore(BTNode *root, int &k);
+BTNode* Convert(BTNode* root);
+void ConvertNode(BTNode* root, BTNode** lastNode);
+//void Serialize(BTNode *root, ostream& output);
 
+struct TreeNode {
+	ElemType data;
+	vector<TreeNode*> children;
+};
+TreeNode* CreateTreeNode(ElemType value);
+void ConnectTreeNodes(TreeNode* parent, TreeNode* child);
+void PrintNode(TreeNode* node);
+void PrintTree(TreeNode* root);
+bool getNodePath(TreeNode* root, TreeNode* node, list<const TreeNode*>& path);
+const TreeNode* getLastCommomNode(const list<const TreeNode*>& path1, const list<const TreeNode*>& path2);
+const TreeNode* getLastCommonParent(TreeNode* root, TreeNode* node1, TreeNode* node2);
 
 bool Duplicate(int *A, int length, int *duplicate);
 int Duplicate2(const int *A,int length);
@@ -176,8 +213,6 @@ private:
 	vector<T> max;
 };
 int FindGreatestSumOfSubArray(int *pData, int length);
-int NumberOf1Between1AndN(unsigned int n);
-int NumberOf1(unsigned int i);
 int digitAtIndex(int index);
 int countOfIntegers(int digit);
 int digitAtIndex(int index, int digit);
@@ -259,6 +294,83 @@ bool matchCore(const char* str, const char* pattern);
 bool isNumberic(const char *str);
 bool scanInteger(const char **str);
 bool scanUnsignedInteger(const char **str);
+void Permutation(char* str);
+void Permutation(char* pStr, char* pBegin);
+int NumberOf1Between1AndN_1(unsigned int n);
+int NumberOf1_1(unsigned int i);
+int NumberOf1Between1AndN_2(unsigned int n);
+int NumberOf1_2(const char* str);
+int PowerBase10(int n);
+int LongestSubstringWithoutDuplication(const string& str);
+//面试题五十九题目一：滑动窗口的最大值
+vector<int> MaxInWindows(const vector<int>& num, int len);
+//面试题五十九题目二：队列的最大值
+template<typename T> class QueueWithMax {
+public:
+	QueueWithMax():currentIndex(0) {}
+	void Push_back(T number) {
+		if (!max_q.empty() && number > max_q.back().number)
+			max_q.pop_back();
+		InternalData interndata = { number,currentIndex };
+		data_q.push_back(interndata);
+		max_q.push_back(interndata);
+		++currentIndex;
+	}
+	void Pop_front() {
+		if (data_q.empty())
+			throw new exception("queue is empty! ");
+		if (data_q.front().index == max_q.front().index)//这个index的作用是当要pop的值是max_q和data_q一样的值时，就把它从max_q中pop出去
+			max_q.pop_front();
+		data_q.pop_front();
+	}
+	const T& max() {
+		if (max_q.empty())
+			throw new exception("queue is empty! ");
+		return max_q.front().number;
+	}
+private:
+	int currentIndex;
+	struct InternalData
+	{
+		T number;
+		int index;
+	};
+	deque<InternalData> data_q;
+	deque<InternalData> max_q;
+};
+void PrintProbability(int number);
+void Probability(int number, int *probability);
+void Probability(int original, int current, int sum, int *probability);
+// 面试题64：求1+2+…+n
+// 题目：求1+2+…+n，要求不能使用乘除法、for、while、if、else、switch、case
+//方法一：
+class Temp {
+public:
+	Temp() {
+		++N;
+		Sum += N;
+	}
+	static void Reset() {
+		N = 0;
+		Sum = 0;
+	}
+	static int getSum() {
+		return Sum;
+	}
+private:
+	static int N;
+	static int Sum;
+};
+int Sum_Solution1(int n);
+//方法二：
+class A;
+
+class B;
+int Sum_Solution2(int n);
+//方法三：
+typedef int (*fun)(int);//定义一个函数指针类型 fun
+int Solution3_Teminator(int n);
+int Sum_Solution3(int n);
 
 #endif // !offer_
 

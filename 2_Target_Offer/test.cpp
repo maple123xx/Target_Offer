@@ -219,7 +219,23 @@ int main() {
 	ConnectTreeNode(pNode4, pNode6, nullptr);
 	BTNode *p = KthNode(pNode1, 3);
 	cout << p->data;*/
-	if (isNumberic(".e1"))
-		cout << "ÕýÈ·" << endl;
+	//cout << NumberOf1Between1AndN_2(216) << endl;
+	/*vector<int> num{2,3,4,2,6,2,5,1};
+	vector<int> res = MaxInWindows(num, 3);
+	for (vector<int>::iterator it = res.begin(); it != res.end(); ++it) {
+		cout << *it << '\t';
+	}*/
+	TreeNode* pNode1 = CreateTreeNode(1);
+	TreeNode* pNode2 = CreateTreeNode(2);
+	TreeNode* pNode3 = CreateTreeNode(3);
+	TreeNode* pNode4 = CreateTreeNode(4);
+	TreeNode* pNode5 = CreateTreeNode(5);
+
+	ConnectTreeNodes(pNode1, pNode2);
+	ConnectTreeNodes(pNode2, pNode3);
+	ConnectTreeNodes(pNode3, pNode4);
+	ConnectTreeNodes(pNode4, pNode5);
+	const TreeNode* last = getLastCommonParent(pNode1, pNode5, pNode4);
+	cout << last->data << endl;
 	return 0;
 }
