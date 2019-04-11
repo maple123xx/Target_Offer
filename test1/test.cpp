@@ -1,6 +1,6 @@
-#include<iostream>
-#include<string>
-using namespace std;
+//#include<iostream>
+//#include<string>
+//using namespace std;
 //
 //
 //string Snake(string& str) {
@@ -16,17 +16,83 @@ using namespace std;
 //	return 0;
 //}
 
-#include <numeric>                                       // For accumulate() - sums a range of elements
-#include <iostream>                                      // For standard streams
-//#include <iterator>                                      // For iterators and begin() and end()
+#include "myNamespace.h"
+
+struct ListNode {
+int val;
+struct ListNode *next;
+ListNode(int x) :
+val(x), next(NULL) {
+}
+};
+struct TreeNode {
+int val;
+struct TreeNode *left;
+struct TreeNode *right;
+TreeNode(int x) :
+val(x), left(NULL), right(NULL) {
+}
+};
+
+struct RandomListNode {
+int label;
+struct RandomListNode *next, *random;
+RandomListNode(int x) :
+label(x), next(NULL), random(NULL) {
+}
+};
+
+int main() {
+	set<int> a{ 0,1,4,2,3,8,2 };
+	a.insert(7);
+	for (const auto&i : a) {
+		cout << i << '\t';
+	}
+	
+	
+	cout <<endl;
+	return 0;
+}
+
+#include<iostream>
+#include<algorithm>
+#include<utility>
 #include<vector>
-#include<memory>
+#include<set>
 #include<string>
+#include<deque>
+#include<stack>
+#include<queue>
+#include<map>
 using namespace std;
-int main()
-{
-	unique_ptr<string> pname{ new string{"huangxixi"} };
-	auto x = make_unique<string>(6,'h');
-	auto y = x.get();
-	cout << *y << endl;
+
+int main() {
+	/*int n;
+	cin >> n;
+	vector<int> array;
+	int temp;
+	for (int i = 0; i < n; i++)
+	{
+	cin >> temp;
+	array.push_back(temp);
+	}*/
+	/*int i;
+	while (cin >> i) {
+
+	array.push_back(i);
+	}*/
+	map<int, int> arr;
+	int n, m;
+	while (cin >> n >> m) {
+		//arr[n] = m;
+		arr.insert(make_pair(n, m));
+	}
+	for (auto it = arr.begin(); it != arr.end(); ++it) {
+		//for(int i=0;i<it->)
+		cout << it->first << '\t' << it->second << endl;
+	}
+	//pair<int, int> a;
+
+
+	cout << endl;
 }

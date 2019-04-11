@@ -1,6 +1,7 @@
 #include<iostream>
 #include<stack>
 #include<string>
+#include<algorithm>
 using namespace std;
 
 //判断当前字符是否为数字
@@ -57,9 +58,73 @@ int cal(const string& str) {
 	}
 	return sum;
 }
+
+inline size_t precedence(const char op)
+{
+	if (op == '+' || op == '-')
+		return 1;
+	if (op == '*' || op == '/')
+		return 2;
+	if (op == '^')
+		return 3;
+	throw std::runtime_error{ string{ "invalid operator in precedence() function: " } +op };
+}
+double execute(std::stack<char>& ops, std::stack<double>& operands)
+{
+	double result{};
+	double rhs{ operands.top() };                            // Get rhs...
+	operands.pop();                                         // ...and delete from stack
+	double lhs{ operands.top() };                            // Get lhs...
+	operands.pop();                                         // ...and delete from stack
+
+	switch (ops.top())                                      // Execute current op
+	{
+	case '+':
+		result = lhs + rhs;
+		break;
+	case '-':
+		result = lhs - rhs;
+		break;
+	case '*':
+		result = lhs * rhs;
+		break;
+	case '/':
+		result = lhs / rhs;
+		break;
+	case '^':
+		result = std::pow(lhs, rhs);
+		break;
+	default:
+		throw std::runtime_error{ string{ "invalid operator in execute() function: " } +ops.top() };
+	}
+	ops.pop();                                              // Delete op just executed
+	operands.push(result);
+	return result;
+}
 int main() {
-	string str = "1+2+99-10-1";
+	/*string str = "12+2+99-10-1";
 	int result = cal(str);
-	cout << "result=" <<result<< endl;
+	cout << "result=" <<result<< endl;*/
+	string str = "1.2+2+99-10-1";
+	stack<double> num;
+	stack<char> op;
+
+	size_t index=0;
+	num.push(stod(str, &index));
+	while (true) {
+		op.push(str[index++]);
+		size_t i = 0;
+		num.push(stod(str.substr(index), &i));
+		index += i;
+		if (index == str.length()) {
+			while (!op.empty())
+				num.push(execute(op, num));
+			break;
+		}
+		while (!op.empty() && precedence(str[index]) <= precedence(op.top()))
+			num.push(execute(op, num));
+		
+	}
+	cout << "result = " << num.top() << endl;
 	return 0;
 }
